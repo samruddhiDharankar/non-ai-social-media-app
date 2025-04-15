@@ -13,6 +13,7 @@ Thumbs.db  # Windows
 
 # Environment files
 .env
+.env.production
 
 # TypeScript-specific
 *.tsbuildinfo

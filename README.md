@@ -12,7 +12,7 @@ npm install
 mkdir backend && cd backend
 npm init -y
 npm install express
-npm install -D typescript ts-node @types/node @types/express
+npm install -D typescript ts-node @types/node @types/express            #for using ESM mode - instead of require to use import statements
 npx tsc --init  # created a tsconfig.json
 ```
 
@@ -29,4 +29,11 @@ added this in tsconfig.json
     "strict": true
   }
 }
+```
+
+# for env variable setup
+
+```
+npm install dotenv
+npm install -D dotenv-cli   # to run diff environments
 ```
