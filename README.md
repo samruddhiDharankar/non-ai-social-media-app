@@ -37,3 +37,9 @@ added this in tsconfig.json
 npm install dotenv
 npm install -D dotenv-cli   # to run diff environments
 ```
+
+# for mongodb & mongoose setup
+
+```
+npm install mongoose
+```
