@@ -43,3 +43,16 @@ npm install -D dotenv-cli   # to run diff environments
 ```
 npm install mongoose
 ```
+
+# for jwt
+
+```
+npm install jsonwebtoken
+npm install -D @types/jsonwebtoken
+```
+
+generate jwt secret key run in terminal
+
+```
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
