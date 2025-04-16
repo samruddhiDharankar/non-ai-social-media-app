@@ -13,5 +13,12 @@ export const getUsers = async (
 
 // dummy
 export const getMe = (req: AuthenticatedRequest, res: Response) => {
-  res.json({ message: `Hello user ${req.user?.id}, you are authorized` });
+  // res.json({ message: `Hello user ${req.user?.id}, you are authorized` });
+  // test these
+  res.json({
+    id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    tier: req.user.tier,
+  });
 };
