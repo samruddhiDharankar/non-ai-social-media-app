@@ -6,5 +6,5 @@ const router = Router();
 
 // protected route
 router.get("/me", protect, getMe);
-
+router.get("/", getUsers); // using for testing
 export default router;

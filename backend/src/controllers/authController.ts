@@ -1,12 +1,20 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import User from "../models/User";
 
-export const loginUserByEmailAndPassword = (req: Request, res: Response) => {
+export const loginUserByEmailAndPassword = async (
+  req: Request,
+  res: Response
+) => {
   const { email, password } = req.body;
 
-  // dummy validation
-  if (email === "test@gmail.com" && password === "123456") {
-    const token = jwt.sign({ id: "user123" }, process.env.JWT_SECRET!, {
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+  }
+
+  if (password === user?.hashedPassword) {
+    const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET!, {
       expiresIn: "1h",
     });
     res.json({ token });
