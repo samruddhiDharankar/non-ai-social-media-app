@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-// Extend Express's Request type to include a `user` field
-interface AuthenticationRequest extends Request {
-  user?: { id: string }; // Optional field that we'll attach after decoding the token
-}
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 
 export const protect = (
-  req: AuthenticationRequest,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void => {

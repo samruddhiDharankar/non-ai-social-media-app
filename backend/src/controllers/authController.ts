@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-export const login = (req: Request, res: Response) => {
-  // dummy user Id => fetch from db
-  const userId = "12345";
+export const loginUserByEmailAndPassword = (req: Request, res: Response) => {
+  const { email, password } = req.body;
 
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {
-    expiresIn: "1d",
-  });
-  res.json({ token });
+  // dummy validation
+  if (email === "test@gmail.com" && password === "123456") {
+    const token = jwt.sign({ id: "user123" }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
+    res.json({ token });
+  } else {
+    res.status(401).json({ message: "Invalid credentials" });
+  }
 };

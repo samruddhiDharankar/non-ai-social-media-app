@@ -56,3 +56,5 @@ generate jwt secret key run in terminal
 ```
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
+
+# created an interface to extend Request module of express called AuthenticatedRequests.ts
