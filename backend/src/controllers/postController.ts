@@ -18,7 +18,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
 export const getPostById = async (req: Request, res: Response) => {
   const postId = req.params.id;
   const post = await Post.findById(postId);
-  if ( !post ) {
+  if (!post) {
     res.status(404).json({ message: "Post not found" });
   }
   res.json(post);
@@ -29,7 +29,8 @@ export const getPostById = async (req: Request, res: Response) => {
 // @route POST /api/posts
 // @access protected
 export const createPost = async (req: AuthenticatedRequest, res: Response) => {
-  const { text, imageUrl, authScore, aiDetectionSummary, tierAtPostTime } = req.body;
+  const { text, imageUrl, authScore, aiDetectionSummary, tierAtPostTime } =
+    req.body;
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
@@ -50,7 +51,10 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
 // @desc Get all posts for a specific user
 // @route GET /api/posts/user/:userId
 // @access public/protected => this should be protected?
-export const getPostByUser = async (req: AuthenticatedRequest, res: Response) => {
+export const getPostByUser = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
