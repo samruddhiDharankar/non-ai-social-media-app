@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import Post from "../models/Post";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 
 // @desc Get all posts
 // @route GET /api/posts
@@ -26,8 +28,12 @@ export const getPostById = async (req: Request, res: Response) => {
 // @desc Create a new post
 // @route POST /api/posts
 // @access protected
-export const createPost = async (req: Request, res: Response) => {
+export const createPost = async (req: AuthenticatedRequest, res: Response) => {
   const { text, imageUrl, authScore, aiDetectionSummary, tierAtPostTime } = req.body;
+  if (!req.user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
   const createdPost = await Post.create({
     text: text,
     imageUrl: imageUrl,
@@ -43,7 +49,11 @@ export const createPost = async (req: Request, res: Response) => {
 // @desc Get all posts for a specific user
 // @route GET /api/posts/user/:userId
 // @access public/protected => this should be protected?
-export const getPostByUser = async (req: Request, res: Response) => {
+export const getPostByUser = async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
   const userId = req.user.id;
   const posts = await Post.find({ userId: userId });
   res.json(posts);

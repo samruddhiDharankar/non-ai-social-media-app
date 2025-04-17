@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { createPost, getAllPosts, getPostById, getPostByUser } from "../controllers/postController";
+import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
 router.get("/", getAllPosts);
