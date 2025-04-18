@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import Post from "../models/Post";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
+import ContentAnalysis from "../models/ContentAnalysis";
+import { aiQueue } from "../queues/aiQueue";
 
 // @desc Get all posts
 // @route GET /api/posts
@@ -18,10 +20,17 @@ export const getAllPosts = async (req: Request, res: Response) => {
 export const getPostById = async (req: Request, res: Response) => {
   const postId = req.params.id;
   const post = await Post.findById(postId);
+
+  const analysis = await ContentAnalysis.findOne({
+    contentId: postId,
+    contentType: "Post",
+  });
+
   if (!post) {
     res.status(404).json({ message: "Post not found" });
   }
-  res.json(post);
+  // res.json(post);
+  res.json({ post, analysis });
   return;
 };
 
@@ -43,7 +52,25 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
     tierAtPostTime: req.user.tier,
     userId: req.user.id,
   });
-  res.status(202).json({ message: "Post created" });
+
+  const analysis = await ContentAnalysis.create({
+    contentId: createdPost._id,
+    contentType: "Post",
+    results: [],
+    status: "pending",
+  });
+
+  await aiQueue.add("analyze-post", {
+    postId: analysis.contentId,
+    text: createdPost.text,
+    imageUrl: createdPost.imageUrl,
+  });
+
+  res.status(201).json({
+    message: "Post created, Content created",
+    postId: createdPost._id,
+  });
+
   // call the ai api to get score
   return;
 };

@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
+import { serverAdapter } from "./queues/bullBoard";
 
 dotenv.config();
 
@@ -13,5 +14,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+
+app.use("/admin/queues", serverAdapter.getRouter());
 
 export default app;

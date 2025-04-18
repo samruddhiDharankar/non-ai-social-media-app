@@ -57,4 +57,20 @@ generate jwt secret key run in terminal
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-# created an interface to extend Request module of express called AuthenticatedRequests.ts
+## created an interface to extend Request module of express called AuthenticatedRequests.ts
+
+## using queue to trigger api jobs for content-analysis
+
+### created docker image for redis using cmd
+
+```
+docker run -d --name redis -p 6379:6379 redis
+
+```
+
+### installed bullmq in node
+
+```
+npm install bullmq ioredis
+npm install -D @types/ioredis
+```
