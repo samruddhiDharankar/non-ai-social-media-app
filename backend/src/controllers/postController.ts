@@ -29,13 +29,12 @@ export const getPostById = async (req: Request, res: Response) => {
 // @route POST /api/posts
 // @access protected
 export const createPost = async (req: AuthenticatedRequest, res: Response) => {
-  const { text, imageUrl, authScore, aiDetectionSummary, tierAtPostTime } =
-    req.body;
+  const { text, imageUrl, authScore, aiDetectionSummary } = req.body;
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-  // call the ai api to get score
+
   const createdPost = await Post.create({
     text: text,
     imageUrl: imageUrl,
@@ -45,6 +44,7 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
     userId: req.user.id,
   });
   res.status(202).json({ message: "Post created" });
+  // call the ai api to get score
   return;
 };
 
@@ -59,8 +59,8 @@ export const getPostByUser = async (
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-  const userId = req.user.id;
-  const posts = await Post.find({ userId: userId });
+
+  const posts = await Post.find({ userId: req.user.id });
   res.json(posts);
   return;
 };
