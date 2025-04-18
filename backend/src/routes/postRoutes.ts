@@ -8,6 +8,7 @@ import {
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
+
 router.get("/feed", getAllPosts);
 router.get("/user", protect, getPostByUser);
 router.get("/:id", getPostById);
