@@ -5,29 +5,46 @@ import mongoose from "mongoose";
 
 const connection = new IORedis({ maxRetriesPerRequest: null });
 
-export const aiWorker = new Worker(
-  "ai-processing",
-  async (job) => {
-    console.log("processing job", job.name, job.data);
-    const { postId, text, imageUrl } = job.data;
-    // call AI api
-    const ObjectId = mongoose.Types.ObjectId.createFromHexString(postId);
-    console.log("ObjectId ", ObjectId);
-    const result = await ContentAnalysis.findOneAndUpdate(
-      { contentId: ObjectId },
-      {
-        $set: {
-          status: "completed",
-          results: [
-            {
-              type: "text",
+const startWorker = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI as string);
+    console.log("MongoDB connected");
+
+    const aiWorker = new Worker(
+      "ai-processing",
+      async (job) => {
+        console.log("processing job", job.name, job.data);
+        const { postId, text, imageUrl } = job.data;
+
+        const result = await ContentAnalysis.findOneAndUpdate(
+          { postId: postId },
+          {
+            $set: {
+              status: "completed",
+              analysisResults: [
+                {
+                  type: "text",
+                },
+              ],
             },
-          ],
-        },
-      }
+          }
+        );
+        console.log("Finished job");
+        return { result };
+      },
+      { connection }
     );
-    return Promise.resolve({ result });
-    console.log("Finished job");
-  },
-  { connection }
-);
+
+    aiWorker.on("completed", (job) => {
+      console.log(`Job ${job.id} has completed`);
+    });
+
+    aiWorker.on("failed", (job, err) => {
+      console.error(`Job ${job?.id} failed:`, err);
+    });
+  } catch (err) {
+    console.error("Error connecting to MongoDB", err);
+  }
+};
+
+startWorker();

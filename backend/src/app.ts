@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
 import { serverAdapter } from "./queues/bullBoard";
+import contentAnalysisRoutes from "./routes/contentAnalysisRoutes";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/content-analyses", contentAnalysisRoutes);
 
 app.use("/admin/queues", serverAdapter.getRouter());
 

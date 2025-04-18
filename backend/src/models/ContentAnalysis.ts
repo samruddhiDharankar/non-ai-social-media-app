@@ -12,9 +12,9 @@ export interface IAnalysisResult {
 }
 
 export interface IContentAnalysis extends Document {
-  contentId: Types.ObjectId; // eg: post, story, video...
+  postId: Types.ObjectId; // eg: post, story, video...
   contentType: string;
-  results: IAnalysisResult[]; // one or more results
+  analysisResults: IAnalysisResult[]; // one or more results
   status: "pending" | "completed" | "failed";
   createdAt: Date;
   updatedAt: Date;
@@ -22,9 +22,9 @@ export interface IContentAnalysis extends Document {
 
 const ContentAnalysisSchema = new Schema<IContentAnalysis>(
   {
-    contentId: { type: Schema.Types.ObjectId, required: true, index: true },
+    postId: { type: Schema.Types.ObjectId, required: true, index: true },
     contentType: { type: String, required: true, index: true },
-    results: [
+    analysisResults: [
       {
         type: {
           type: String,

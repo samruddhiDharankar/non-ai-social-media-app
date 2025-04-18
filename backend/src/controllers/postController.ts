@@ -22,7 +22,7 @@ export const getPostById = async (req: Request, res: Response) => {
   const post = await Post.findById(postId);
 
   const analysis = await ContentAnalysis.findOne({
-    contentId: postId,
+    postId: postId,
     contentType: "Post",
   });
 
@@ -54,14 +54,14 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
   });
 
   const analysis = await ContentAnalysis.create({
-    contentId: createdPost._id,
+    postId: createdPost._id,
     contentType: "Post",
-    results: [],
+    analysisResults: [],
     status: "pending",
   });
 
   await aiQueue.add("analyze-post", {
-    postId: analysis.contentId,
+    postId: analysis.postId,
     text: createdPost.text,
     imageUrl: createdPost.imageUrl,
   });
