@@ -9,6 +9,7 @@ export interface IUser extends Document {
   profilePictUrl?: string;
   tier: string;
   averageAuthScore: number;
+  badge: string;
   postCount: number;
   streakCount: number;
   lastLogin?: Date;
@@ -24,6 +25,7 @@ const userSchema = new Schema<IUser>(
     profilePictUrl: { type: String },
     tier: { type: String, default: "Rookie" },
     averageAuthScore: { type: Number, default: 0 },
+    badge: { type: String, default: "🍼" },
     postCount: { type: Number, default: 0 },
     streakCount: { type: Number, default: 0 },
     lastLogin: { type: Date, default: null },
