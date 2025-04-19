@@ -10,18 +10,31 @@ export const loginUserByEmailAndPassword = async (
   const { email, password } = req.body;
   const normalizedEmail = email.toLowerCase().trim();
   const user = await User.findOne({ email: normalizedEmail });
+
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
   }
+
   const isPasswordCorrect = await bcrypt.compare(password, user.hashedPassword);
   if (isPasswordCorrect) {
     user.lastLogin = new Date();
     await user.save();
+
     const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET!, {
       expiresIn: "1h",
     });
-    res.json({ token });
+
+    res.cookie("token", token, {
+      httpOnly: true, // Prevents client-side JS access
+      secure: false, // set to true in production with https
+      sameSite: "lax", // Helps mitigate CSRF attacks
+      maxAge: 1 * 1 * 60 * 60 * 1000, // 1hr
+    });
+
+    // res.json({ token });
+    res.status(200).json({ message: "Logged in successfully" });
+    return;
   } else {
     res.status(401).json({ message: "Invalid credentials" });
     return;
