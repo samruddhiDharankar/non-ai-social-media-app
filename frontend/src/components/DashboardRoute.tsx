@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Post } from '../types/post';
 
 function DashboardRoute() {
+    const [feedData, setFeedData] = useState<Post[]>([]);
+    const [enrichedFeedData, setEnrichedFeedData] = useState<Post[]>([]);
+
     useEffect(() => {
-        console.log("inside dash");
         const getFeed = async () => {
             try {
-                console.log("inside dash try");
                 const response = await fetch("http://localhost:3000/api/posts/feed", {
                     method: "GET",
                     headers: {
@@ -15,7 +17,7 @@ function DashboardRoute() {
                 });
                 const data = await response.json();
                 console.log("dashboard data ", data);
-                console.log("okay");
+                setFeedData(data);
             } catch (err) {
                 console.log("error", err);
             }
@@ -23,9 +25,51 @@ function DashboardRoute() {
         getFeed();
     }, []);
 
+    useEffect(() => {
+        const enrichFeedWithUserData = async () => {
+            const updatedFeed = await Promise.all(feedData.map(async (post) => {
+                try {
+                    const response = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                    });
+                    const userData = await response.json();
+                    return {
+                        ...post,
+                        username: userData.username ?? "Unknown",
+                    }
+                } catch (err) {
+                    console.error("Error fetching user data", err);
+                    return {
+                        ...post,
+                        username: "Unknown",
+                    }
+                }
+            }));
+            setEnrichedFeedData(updatedFeed);
+        };
+
+        if (feedData.length > 0) {
+            enrichFeedWithUserData();
+        }
+    }, [feedData]);
+
     return (
         <>
-            <p>Hello world</p>
+            <div>
+                {enrichedFeedData.map((feed) => (
+                    <div key={feed._id}>
+                        <p>{feed.text}</p>
+                        <p>{feed.aiDetectionSummary}</p>
+                        <p>{feed.createdAt}</p>
+                        <p>{feed.username}</p>
+                        <p>.</p>
+                    </div>
+                ))}
+            </div>
         </>
     )
 }
