@@ -18,6 +18,7 @@ export const getMe = async (
   res: Response
 ): Promise<void> => {
   // res.json({ message: `Hello user ${req.user?.id}, you are authorized` });
+  console.log("inside get/me");
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
