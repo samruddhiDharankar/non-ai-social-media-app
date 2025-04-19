@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardRoute from '../components/DashboardRoute'
+import DashboardRoute from '../components/DashboardFeed'
 
 function Dashboard() {
     return (

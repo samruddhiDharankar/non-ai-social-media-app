@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Dashboard from './pages/Dashboard'
+import Login from './pages/LoginPage'
+import Signup from './pages/SignupPage'
+import Dashboard from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
