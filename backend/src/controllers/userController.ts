@@ -1,10 +1,7 @@
 import User from "../models/User";
 import { Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
-import {
-  getAverageAuthScore,
-  updateUserByFilter,
-} from "../services/userService";
+import { getAverageAuthScore } from "../services/userService";
 import { getUserTier } from "../utils/tierUtils";
 
 export const getUsers = async (
@@ -38,16 +35,20 @@ export const getMe = async (
   }
 
   const avgScore = await getAverageAuthScore(req.user?.id);
-  const { tier, badge } = getUserTier(avgScore);
+  const { tier, badge } = await getUserTier(avgScore);
+  console.log("avg", avgScore);
 
-  const updatedUser = updateUserByFilter(
+  const updatedUser = await User.findByIdAndUpdate(
     { _id: req.user.id },
     {
-      averageAuthScore: +avgScore.toFixed(2),
-      tier,
-      badge,
+      $set: {
+        averageAuthScore: +avgScore.toFixed(2),
+        tier: tier,
+        badge: badge,
+      },
     }
   );
 
   res.json(updatedUser);
+  return;
 };

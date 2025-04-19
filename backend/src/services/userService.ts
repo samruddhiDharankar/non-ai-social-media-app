@@ -1,6 +1,4 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
 import Post from "../models/Post";
-import User, { IUser } from "../models/User";
 
 export const getAverageAuthScore = async (userId: string): Promise<number> => {
   const posts = await Post.find({ userId: userId })
@@ -15,25 +13,4 @@ export const getAverageAuthScore = async (userId: string): Promise<number> => {
     0
   );
   return totalScore / posts.length;
-};
-
-export const updateUserByFilter = async (
-  filter: FilterQuery<IUser>,
-  updateData: UpdateQuery<IUser>
-) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      filter,
-      {
-        $set: {
-          updateData,
-        },
-      },
-      { new: true }
-    );
-    // console.log(updatedUser);
-    return updatedUser;
-  } catch (err) {
-    console.error("Error updating user", err);
-  }
 };

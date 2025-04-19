@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
+import UserProfilePage from './pages/UserProfilePage'
 
 function App() {
 
@@ -24,6 +25,12 @@ function App() {
         <Route path="/create-post" element={
           <ProtectedRoute>
             <CreatePostPage />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/me" element={
+          <ProtectedRoute>
+            <UserProfilePage />
           </ProtectedRoute>
         } />
 

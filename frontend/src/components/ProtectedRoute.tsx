@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     }, [])
 
     if (isAuth === null) return <p>Loading...</p>
-    if (!isAuth) return <Navigate to="/" />
+    if (!isAuth) return <Navigate to="/" />     // navigates back to login
     return children;
 };
 
