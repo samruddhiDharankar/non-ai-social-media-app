@@ -13,7 +13,6 @@ export const getUsers = async (
   res.json(users);
 };
 
-// dummy
 export const getMe = async (
   req: AuthenticatedRequest,
   res: Response
@@ -33,6 +32,6 @@ export const getMe = async (
     email: req.user.email,
     tier,
     averageAuthScore: +avgScore.toFixed(2),
-    // add badge in here and model
+    badge,
   });
 };
