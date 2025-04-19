@@ -1,6 +1,8 @@
 import User from "../models/User";
 import { Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
+import { getAverageAuthScore } from "../services/userService";
+import { getUserTier } from "../utils/tierUtils";
 
 export const getUsers = async (
   req: Request,
@@ -12,17 +14,25 @@ export const getUsers = async (
 };
 
 // dummy
-export const getMe = (req: AuthenticatedRequest, res: Response): void => {
+export const getMe = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
   // res.json({ message: `Hello user ${req.user?.id}, you are authorized` });
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-  // test these
+
+  const avgScore = await getAverageAuthScore(req.user?.id);
+  const { tier, badge } = getUserTier(avgScore);
+
   res.json({
     id: req.user.id,
     name: req.user.name,
     email: req.user.email,
-    tier: req.user.tier,
+    tier,
+    averageAuthScore: +avgScore.toFixed(2),
+    // add badge in here and model
   });
 };
