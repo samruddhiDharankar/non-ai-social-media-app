@@ -4,8 +4,6 @@ import ContentAnalysis from "../models/ContentAnalysis";
 import mongoose from "mongoose";
 import { analyzeTextContent } from "../services/aiScoringService";
 import Post from "../models/Post";
-import User from "../models/User";
-import { updateUserByFilter } from "../services/userService";
 
 const connection = new IORedis({ maxRetriesPerRequest: null });
 

@@ -87,7 +87,9 @@ export const getPostByUser = async (
     return;
   }
 
-  const posts = await Post.find({ userId: req.user.id });
+  const posts = await Post.find({ userId: req.user.id }).sort({
+    createdAt: -1,
+  });
   res.json(posts);
   return;
 };

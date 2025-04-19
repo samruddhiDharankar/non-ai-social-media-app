@@ -36,7 +36,6 @@ export const getMe = async (
 
   const avgScore = await getAverageAuthScore(req.user?.id);
   const { tier, badge } = await getUserTier(avgScore);
-  console.log("avg", avgScore);
 
   const updatedUser = await User.findByIdAndUpdate(
     { _id: req.user.id },
