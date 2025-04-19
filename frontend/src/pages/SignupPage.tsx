@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import SignupForm from "../components/SignupForm"
 
-const Signup = () => {
+const SignupPage = () => {
     const navigate = useNavigate();
 
     const handleLoginClick = () => {
@@ -22,4 +22,4 @@ const Signup = () => {
     )
 };
 
-export default Signup;
+export default SignupPage;

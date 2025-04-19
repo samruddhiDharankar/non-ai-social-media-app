@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Login from './pages/LoginPage'
-import Signup from './pages/SignupPage'
-import Dashboard from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
+import DashboardPage from './pages/DashboardPage'
+import CreatePostPage from './pages/CreatePostPage'
 
 function App() {
 
@@ -11,12 +12,18 @@ function App() {
     <>
 
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Dashboard />
+            <DashboardPage />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/create-post" element={
+          <ProtectedRoute>
+            <CreatePostPage />
           </ProtectedRoute>
         } />
 
