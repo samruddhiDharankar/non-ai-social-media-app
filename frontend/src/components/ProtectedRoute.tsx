@@ -20,9 +20,16 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
             }
         }
         callAuth();
+
     }, [])
 
-    if (isAuth === null) return <p>Loading...</p>
+    if (isAuth === null) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+            </div>
+        );
+    }
     if (!isAuth) return <Navigate to="/" />     // navigates back to login
     return children;
 };

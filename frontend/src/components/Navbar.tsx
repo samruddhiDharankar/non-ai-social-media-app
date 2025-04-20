@@ -12,7 +12,10 @@ function Navbar() {
 
     return (
         <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-            <Link to="/dashboard" className="text-xl font-semibold text-indigo-600 transition">
+            <Link
+                to="/dashboard"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-xl font-semibold text-indigo-600 transition">
                 Dashboard
             </Link>
 
@@ -50,14 +53,23 @@ function Navbar() {
             <div
                 className={`lg:hidden absolute top-full right-0 w-full bg-white shadow-md ${isMenuOpen ? 'block' : 'hidden'}`}
             >
-                <Link to="/create-post" className="block px-6 py-2 hover:text-indigo-600 transition">
+                <Link
+                    to="/create-post"
+                    onClick={() => setIsMenuOpen(false)}        // closes the menu after clicking 
+                    className="block px-6 py-2 hover:text-indigo-600 transition">
                     Create Post
                 </Link>
-                <Link to="/me" className="block px-6 py-2 hover:text-indigo-600 transition">
+                <Link
+                    to="/me"
+                    onClick={() => setIsMenuOpen(false)}        // closes the menu after clicking  
+                    className="block px-6 py-2 hover:text-indigo-600 transition">
                     My Profile
                 </Link>
                 <button
-                    onClick={handleLogout}
+                    onClick={() => {
+                        setIsMenuOpen(false)
+                        handleLogout();
+                    }}
                     className="block w-full text-center bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-500 transition"
                 >
                     Logout
