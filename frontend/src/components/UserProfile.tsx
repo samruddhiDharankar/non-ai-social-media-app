@@ -73,6 +73,29 @@ function UserProfile() {
                                 <p className="text-lg">{post?.text}</p>
                                 <p className="text-sm text-indigo-600">{post?.aiDetectionSummary}</p>
                                 <p className="text-sm text-gray-400">{formatDateTime(post?.createdAt)}</p>
+
+                                <div className="mt-4">
+                                    <h3 className="text-sm font-semibold text-gray-700">Comments</h3>
+                                    <div className="space-y-4 mt-2">
+                                        {post.comments && post.comments.length > 0 ? (
+                                            post.comments.map((comment) => (
+                                                <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
+                                                    <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
+                                                    <p className="text-sm text-gray-600">{comment.content}</p>
+                                                    <span className="text-sm text-gray-500">
+                                                        {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
+                                                            ? formatDateTime(comment.createdAt)
+                                                            : "Just now"
+                                                        }
+                                                    </span>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-gray-500">No comments yet</p>
+                                        )}
+                                    </div>
+                                </div>
+
                             </div>
                         ))}
                     </div>

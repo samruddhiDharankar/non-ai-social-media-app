@@ -80,7 +80,7 @@ function DashboardRoute() {
                         </div>
 
                         <div className="mt-4">
-                            <h3 className="text-mg font-semibold text-gray-700">Comments</h3>
+                            <h3 className="text-sm font-semibold text-gray-700">Comments</h3>
                             <div className="space-y-4 mt-2">
                                 {feed.comments && feed.comments.length > 0 ? (
                                     feed.comments.map((comment) => (

@@ -101,9 +101,16 @@ export const getPostByUser = async (
     return;
   }
 
-  const posts = await Post.find({ userId: req.user.id }).sort({
-    createdAt: -1,
-  });
+  const posts = await Post.find({ user: req.user.id })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "username",
+      },
+      select: "content username createdAt updatedAt",
+    })
+    .sort({ createdAt: -1 });
   res.json(posts);
   return;
 };
