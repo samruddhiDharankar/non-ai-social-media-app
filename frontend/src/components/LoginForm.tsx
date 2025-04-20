@@ -38,8 +38,6 @@ function LoginForm() {
             console.log("Error", err);
             setIsLoginFailed(true);
         }
-
-        console.log("Logged in", form);
     }
 
 

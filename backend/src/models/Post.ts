@@ -6,7 +6,7 @@ export interface IPost extends Document {
   authScore: number;
   aiDetectionSummary: string;
   tierAtPostTime: string;
-  userId: Types.ObjectId; // refers to User document
+  user: Types.ObjectId; // refers to User document
   comments: Types.Array<Types.ObjectId>; // array of comment references
 }
 
@@ -17,10 +17,9 @@ const postSchema = new Schema<IPost>(
     authScore: { type: Number, default: 0 },
     aiDetectionSummary: { type: String, default: "" },
     tierAtPostTime: { type: String, default: "" },
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User", //reference to the User model
-      required: true,
     },
     comments: [
       {

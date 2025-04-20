@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import Comment from "../models/Comment";
+import Post from "../models/Post";
 
 export const createComment = async (
   req: AuthenticatedRequest,
@@ -11,12 +12,15 @@ export const createComment = async (
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-  const userId = req.user.id;
+  const user = req.user.id;
 
   const newComment = await Comment.create({
     postId: postId,
-    userId: userId,
+    user: user,
     content: content,
+  });
+  await Post.findByIdAndUpdate(postId, {
+    $push: { comments: newComment._id },
   });
   res.status(201).json({ message: "comment created" });
   return;

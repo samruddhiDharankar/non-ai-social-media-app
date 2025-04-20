@@ -4,13 +4,25 @@ import Post from "../models/Post";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import ContentAnalysis from "../models/ContentAnalysis";
 import { aiQueue } from "../queues/aiQueue";
+import Comment from "../models/Comment";
 
 // @desc Get all posts
 // @route GET /api/posts
 // @access public/protected => NEED TO DECIDE
 export const getAllPosts = async (req: Request, res: Response) => {
   const posts = await Post.find({})
-    .populate("comments")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "username",
+      },
+      select: "content username",
+    })
+    .populate({
+      path: "user",
+      select: "username",
+    })
     .sort({ createdAt: -1 });
   res.json(posts);
   return;
@@ -52,7 +64,7 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
     authScore: authScore,
     aiDetectionSummary: aiDetectionSummary,
     tierAtPostTime: req.user.tier,
-    userId: req.user.id,
+    user: req.user.id,
   });
 
   const analysis = await ContentAnalysis.create({

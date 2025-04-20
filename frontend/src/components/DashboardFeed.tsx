@@ -19,27 +19,28 @@ function DashboardRoute() {
                     credentials: "include",
                 });
                 const posts = await response.json();
-
+                console.log(posts);
+                setFeedData(posts);
                 // Enrich posts with user data
-                const enrichedPosts = await Promise.all(posts.map(async (post: Post) => {
-                    const userRes = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    });
-                    const user = await userRes.json();
+                // const enrichedPosts = await Promise.all(posts.map(async (post: Post) => {
+                //     const userRes = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
+                //         method: "GET",
+                //         headers: { "Content-Type": "application/json" },
+                //         credentials: "include",
+                //     });
+                //     const user = await userRes.json();
 
-                    const commentsRes = await fetch(`http://localhost:3000/api/comments/${post._id}`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                    });
-                    const comments = await commentsRes.json();
+                //     const commentsRes = await fetch(`http://localhost:3000/api/comments/${post._id}`, {
+                //         method: 'GET',
+                //         headers: { 'Content-Type': 'application/json' },
+                //         credentials: 'include',
+                //     });
+                //     const comments = await commentsRes.json();
 
-                    return { ...post, username: user.username ?? "Unknown", comments };
-                }));
+                //     return { ...post, username: user.username ?? "Unknown", comments };
+                // }));
 
-                setFeedData(enrichedPosts);
+                // setFeedData(enrichedPosts);
 
             } catch (err) {
                 console.log("Error fetching posts", err);
