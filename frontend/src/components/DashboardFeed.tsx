@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Post } from '../types/post';
+import { formatDateTime } from '../utils/dateFormatter';
 
 function DashboardRoute() {
     const [feedData, setFeedData] = useState<Post[]>([]);
@@ -64,7 +65,7 @@ function DashboardRoute() {
                     <div key={feed._id}>
                         <p>{feed.text}</p>
                         <p>{feed.aiDetectionSummary}</p>
-                        <p>{feed.createdAt}</p>
+                        <p>{formatDateTime(feed.createdAt)}</p>
                         <p>{feed.username}</p>
                         <p>.</p>
                     </div>
