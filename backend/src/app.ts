@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
 import { serverAdapter } from "./queues/bullBoard";
 import contentAnalysisRoutes from "./routes/contentAnalysisRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/content-analyses", contentAnalysisRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.use("/admin/queues", serverAdapter.getRouter());
 

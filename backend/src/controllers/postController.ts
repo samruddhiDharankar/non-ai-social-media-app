@@ -9,7 +9,9 @@ import { aiQueue } from "../queues/aiQueue";
 // @route GET /api/posts
 // @access public/protected => NEED TO DECIDE
 export const getAllPosts = async (req: Request, res: Response) => {
-  const posts = await Post.find().sort({ createdAt: -1 });
+  const posts = await Post.find({})
+    .populate("comments")
+    .sort({ createdAt: -1 });
   res.json(posts);
   return;
 };

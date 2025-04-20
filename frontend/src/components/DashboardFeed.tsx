@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 
 function DashboardRoute() {
     const [feedData, setFeedData] = useState<Post[]>([]);
-    const [enrichedFeedData, setEnrichedFeedData] = useState<Post[]>([]);
+    const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
+    const [commentLoading, setCommentLoading] = useState(false);
 
+    // Fetch posts and enrich with user data
     useEffect(() => {
         const getFeed = async () => {
             try {
@@ -16,54 +18,77 @@ function DashboardRoute() {
                     },
                     credentials: "include",
                 });
-                const data = await response.json();
-                console.log("dashboard data ", data);
-                setFeedData(data);
-            } catch (err) {
-                console.log("error", err);
-            }
-        }
-        getFeed();
-    }, []);
+                const posts = await response.json();
 
-    useEffect(() => {
-        const enrichFeedWithUserData = async () => {
-            const updatedFeed = await Promise.all(feedData.map(async (post) => {
-                try {
-                    const response = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
+                // Enrich posts with user data
+                const enrichedPosts = await Promise.all(posts.map(async (post: Post) => {
+                    const userRes = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
                         method: "GET",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
-                    const userData = await response.json();
-                    return {
-                        ...post,
-                        username: userData.username ?? "Unknown",
-                    }
-                } catch (err) {
-                    console.error("Error fetching user data", err);
-                    return {
-                        ...post,
-                        username: "Unknown",
-                    }
-                }
-            }));
-            setEnrichedFeedData(updatedFeed);
+                    const user = await userRes.json();
+
+                    const commentsRes = await fetch(`http://localhost:3000/api/comments/${post._id}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                    });
+                    const comments = await commentsRes.json();
+
+                    return { ...post, username: user.username ?? "Unknown", comments };
+                }));
+
+                setFeedData(enrichedPosts);
+
+            } catch (err) {
+                console.log("Error fetching posts", err);
+            }
         };
 
-        if (feedData.length > 0) {
-            enrichFeedWithUserData();
+        getFeed();
+
+    }, []);
+
+    // Handle adding a new comment
+    const handleAddComment = async (postId: string) => {
+        const comment = newComment[postId]?.trim();
+        if (!comment) return;
+        setCommentLoading(true);
+
+        try {
+            const response = await fetch("http://localhost:3000/api/comments/", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ postId, content: comment }),
+            });
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                setNewComment((prev) => ({ ...prev, [postId]: "" }));  // Clear comment for only this post
+
+                // Refresh comments for the post
+                setFeedData(prevData =>
+                    prevData.map(post =>
+                        post._id === postId ? { ...post, comments: [...post.comments, data] } : post
+                    )
+                );
+            } else {
+                console.log("Failed to add comment");
+            }
+        } catch (err) {
+            console.error("Error adding comment", err);
+        } finally {
+            setCommentLoading(false);
         }
-    }, [feedData]);
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-6">
-            {/* <h1 className="text-2xl font-semibold text-center mb-6">Dashboard Feed</h1> */}
-
             <div className="space-y-6">
-                {enrichedFeedData.map((feed) => (
+                {feedData.map((feed) => (
                     <div
                         key={feed._id}
                         className="p-4 bg-white shadow-md rounded-md border border-gray-200 hover:shadow-lg transition"
@@ -76,11 +101,52 @@ function DashboardRoute() {
                             <span>Posted by <span className="font-medium text-gray-700">{feed.username}</span></span>
                             <span>{formatDateTime(feed.createdAt)}</span>
                         </div>
+
+                        <div className="mt-4">
+                            <h3 className="text-lg font-semibold text-gray-700">Comments</h3>
+                            <div className="space-y-4 mt-2">
+                                {feed.comments && feed.comments.length > 0 ? (
+                                    feed.comments.map((comment) => (
+                                        <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
+                                            <p className="font-medium text-gray-800">{comment.username}</p>
+                                            <p className="text-gray-600">{comment.content}</p>
+                                            <span className="text-sm text-gray-500">
+                                                {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
+                                                    ? formatDateTime(comment.createdAt)
+                                                    : "Just now"
+                                                }
+                                            </span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No comments yet</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <textarea
+                                value={newComment[feed._id] || ""}
+                                onChange={(e) => setNewComment((prev) => ({
+                                    ...prev,
+                                    [feed._id]: e.target.value,
+                                }))}
+                                placeholder="Write a comment..."
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                            />
+                            <button
+                                onClick={() => handleAddComment(feed._id)}
+                                disabled={commentLoading}
+                                className="mt-2 w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            >
+                                {commentLoading ? 'Posting...' : "Post Comment"}
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
-export default DashboardRoute
+export default DashboardRoute;

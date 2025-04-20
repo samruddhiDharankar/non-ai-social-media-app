@@ -1,3 +1,11 @@
+export interface Comment {
+  _id: string;
+  content: string;
+  userId: string;
+  username?: string;
+  createdAt: string;
+}
+
 export interface Post {
   _id: string;
   text: string;
@@ -5,4 +13,5 @@ export interface Post {
   createdAt: string;
   userId: string;
   username?: string;
+  comments: Comment[];
 }
