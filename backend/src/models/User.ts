@@ -20,7 +20,7 @@ const userSchema = new Schema<IUser>(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     hashedPassword: { type: String, required: true },
-    username: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     bio: { type: String },
     profilePictUrl: { type: String },
     tier: { type: String, default: "Newbie" },

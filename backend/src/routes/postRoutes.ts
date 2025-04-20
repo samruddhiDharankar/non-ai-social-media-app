@@ -3,14 +3,14 @@ import {
   createPost,
   getAllPosts,
   getPostById,
-  getPostByUser,
+  getPostByUserId,
 } from "../controllers/postController";
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
 
 router.get("/feed", getAllPosts);
-router.get("/user", protect, getPostByUser);
+router.get("/user/:id", protect, getPostByUserId);
 router.get("/:id", getPostById);
 router.post("/", protect, createPost);
 

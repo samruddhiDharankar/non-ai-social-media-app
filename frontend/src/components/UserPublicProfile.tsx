@@ -1,75 +1,65 @@
-import { useEffect, useState } from "react";
-import { User } from "../types/user";
-import { Post } from "../types/post";
-import { formatDateTime } from "../utils/dateFormatter";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { User } from '../types/user';
+import { Post } from '../types/post';
+import { formatDateTime } from '../utils/dateFormatter';
 
-function UserProfile() {
+function UserPublicProfile() {
     const { username } = useParams();
     const [userData, setUserData] = useState<User>();
     const [userPostData, setUserPostData] = useState<Post[]>([]);
-    const [isUserData, setIsUserData] = useState(false);
+    console.log(username)
 
     useEffect(() => {
-        const getUserData = async () => {
+        const fetchUserAndPosts = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/users/username/${username}`, {
+                const userResponse = await fetch(`http://localhost:3000/api/users/username/${username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     credentials: "include",
                 });
-                const data = await response.json();
-                setUserData(data);
-                setIsUserData(true);
+                const userData = await userResponse.json();
+                if (userResponse.ok) {
+                    setUserData(userData);
+                    console.log(userData._id);
+                    const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData?._id}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                    });
+                    const postData = await postResponse.json();
+                    console.log("user post data", postData);
+                    setUserPostData(postData);
+                }
             } catch (err) {
-                console.log("error", err);
-                setIsUserData(false);
+                console.log("Error fetching user & posts", err)
             }
         }
 
-        const getPostsByUser = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/posts/user/${userData?._id}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                });
-                const data = await response.json();
-                console.log("user post data", data);
-                setUserPostData(data);
-            } catch (err) {
-                console.log("error", err);
-            }
-        }
-        getUserData();
-        getPostsByUser();
-    });
+        fetchUserAndPosts();
+    }, []);
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
-            <h1 className="text-2xl font-semibold text-center mb-6">Profile</h1>
-
-            {isUserData && (
-                <div className="space-y-4">
-                    <div className="bg-gray-50 p-4 rounded-md border border-gray-300">
-                        <p className="text-lg font-medium">Name: <span className="text-indigo-600">{userData?.name}</span></p>
-                        <p className="text-lg font-medium">Username: <span className="text-indigo-600">{userData?.username}</span></p>
-                        <p className="text-lg font-medium">Badge: <span className="text-indigo-600">{userData?.badge}</span></p>
-                        <p className="text-lg font-medium">Post Count: <span className="text-indigo-600">{userData?.postCount}</span></p>
-                        <p className="text-lg font-medium">Streak Count: <span className="text-indigo-600">{userData?.streakCount}</span></p>
-                        <p className="text-lg font-medium">Tier: <span className="text-indigo-600">{userData?.tier}</span></p>
-                        <button className="mt-2 w-20 p-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">Follow</button>
-                    </div>
+        <>
+            <div className="space-y-4">
+                <div className="bg-gray-50 p-4 rounded-md border border-gray-300">
+                    <p className="text-lg font-medium">Name: <span className="text-indigo-600">{userData?.name}</span></p>
+                    <p className="text-lg font-medium">Username: <span className="text-indigo-600">{userData?.username}</span></p>
+                    <p className="text-lg font-medium">Badge: <span className="text-indigo-600">{userData?.badge}</span></p>
+                    <p className="text-lg font-medium">Post Count: <span className="text-indigo-600">{userData?.postCount}</span></p>
+                    <p className="text-lg font-medium">Streak Count: <span className="text-indigo-600">{userData?.streakCount}</span></p>
+                    <p className="text-lg font-medium">Tier: <span className="text-indigo-600">{userData?.tier}</span></p>
+                    <button className="mt-2 w-20 p-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">Follow</button>
                 </div>
-            )}
+            </div>
 
             <div className="mt-8">
                 <h2 className="text-xl font-semibold">Posts</h2>
-                {userPostData.length > 0 ? (
+                {userPostData && userPostData.length > 0 ? (
                     <div className="space-y-4 mt-4">
                         {userPostData.map((post) => (
                             <div key={post._id} className="bg-gray-50 p-4 rounded-md border border-gray-300">
@@ -106,8 +96,8 @@ function UserProfile() {
                     <p className="text-center text-sm text-gray-500">No posts available</p>
                 )}
             </div>
-        </div>
+        </>
     )
 }
 
-export default UserProfile
+export default UserPublicProfile

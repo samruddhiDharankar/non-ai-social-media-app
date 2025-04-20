@@ -98,16 +98,16 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
 // @desc Get all posts for a specific user
 // @route GET /api/posts/user/:userId
 // @access public/protected => this should be protected?
-export const getPostByUser = async (
+export const getPostByUserId = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
+  const { id } = req.params;
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-
-  const posts = await Post.find({ user: req.user.id })
+  const posts = await Post.find({ user: id })
     .populate({
       path: "comments",
       populate: {

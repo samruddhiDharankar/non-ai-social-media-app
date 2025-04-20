@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
 import UserProfilePage from './pages/UserProfilePage'
 import Layout from './pages/Layout'
+import UserPublicProfilePage from './pages/UserPublicProfilePage'
 
 function App() {
 
@@ -34,11 +35,19 @@ function App() {
             </Layout>
           </ProtectedRoute>
         } />
-
+        {/* 
         <Route path="/me" element={
           <ProtectedRoute>
             <Layout>
               <UserProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        } /> */}
+
+        <Route path="/:username" element={
+          <ProtectedRoute>
+            <Layout>
+              <UserPublicProfilePage />
             </Layout>
           </ProtectedRoute>
         } />

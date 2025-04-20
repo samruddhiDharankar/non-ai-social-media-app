@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { User } from '../types/user';
 
 function Navbar() {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [userData, setUserData] = useState<User>();
 
     const handleLogout = async () => {
         try {
@@ -17,6 +19,21 @@ function Navbar() {
             console.log("error", err);
         }
     }
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await fetch("http://localhost:3000/api/users/me", {
+                    credentials: "include",
+                });
+                const data = await res.json();
+                setUserData(data);
+            } catch (err) {
+                console.error("Failed to fetch user:", err);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     return (
         <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
@@ -45,7 +62,7 @@ function Navbar() {
                 <Link to="/create-post" className="hover:text-indigo-600 transition">
                     Create Post
                 </Link>
-                <Link to="/me" className="hover:text-indigo-600 transition">
+                <Link to={`/${userData?.username}`} className="hover:text-indigo-600 transition">
                     My Profile
                 </Link>
                 <button

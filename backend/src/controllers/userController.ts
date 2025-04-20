@@ -25,6 +25,19 @@ export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
   return;
 };
 
+export const getUserByUsername = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const { username } = req.params;
+  const user = await User.findOne({ username: username });
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+  }
+  res.json(user);
+  return;
+};
+
 export const getMe = async (
   req: AuthenticatedRequest,
   res: Response

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
+import { Link } from 'react-router-dom';
 
 function DashboardRoute() {
     const [feedData, setFeedData] = useState<Post[]>([]);
@@ -75,7 +76,13 @@ function DashboardRoute() {
                             AI Summary: {feed.aiDetectionSummary}
                         </p>
                         <div className="text-sm text-gray-500 flex justify-between">
-                            <span>Posted by <span className="font-medium text-gray-700">{feed.user.username}</span></span>
+                            <span>Posted by
+                                <Link to={`/me`} >
+                                    <span className="font-medium text-gray-700">
+                                        {feed.user.username}
+                                    </span>
+                                </Link>
+                            </span>
                             <span>{formatDateTime(feed.createdAt)}</span>
                         </div>
 
