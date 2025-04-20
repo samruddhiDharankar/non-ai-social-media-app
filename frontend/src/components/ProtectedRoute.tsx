@@ -12,7 +12,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
                     credentials: "include",
                 });
                 const result = await response.json();
-                console.log("auth response", result);
                 setIsAuth(response.ok);
             } catch (err) {
                 console.error("Auth check failed", err);

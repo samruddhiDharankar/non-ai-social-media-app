@@ -82,7 +82,7 @@ function CreatePostForm() {
 
                 <button
                     type="submit"
-                    className={`w-full py-5 rounded-md transition ${form.text.trim()
+                    className={`w-full py-2 rounded-md transition ${form.text.trim()
                         ? "bg-indigo-600 text-white hover:bg-indigo-500"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}

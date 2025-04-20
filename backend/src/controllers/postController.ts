@@ -5,6 +5,7 @@ import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import ContentAnalysis from "../models/ContentAnalysis";
 import { aiQueue } from "../queues/aiQueue";
 import Comment from "../models/Comment";
+import User from "../models/User";
 
 // @desc Get all posts
 // @route GET /api/posts
@@ -66,6 +67,11 @@ export const createPost = async (req: AuthenticatedRequest, res: Response) => {
     tierAtPostTime: req.user.tier,
     user: req.user.id,
   });
+
+  await User.findByIdAndUpdate(
+    { _id: req.user.id },
+    { $inc: { postCount: 1 } }
+  );
 
   const analysis = await ContentAnalysis.create({
     postId: createdPost._id,
