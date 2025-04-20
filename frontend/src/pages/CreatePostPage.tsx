@@ -4,7 +4,6 @@ function CreatePostPage() {
     return (
         <>
             <div>
-                <p>Create Post</p>
                 <CreatePostForm />
             </div>
         </>

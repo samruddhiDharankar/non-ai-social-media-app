@@ -12,14 +12,10 @@ function Navbar() {
         <>
             <nav className='bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50'>
                 <Link to="/dashboard" className="text-xl front-semibold text-indigo-600 transition">
-                    AuthRate
+                    Dashboard
                 </Link>
 
                 <div className='flex gap-4'>
-                    <Link to="/dashboard" className='hover:text-indigo-600 transition'>
-                        Dashboard
-                    </Link>
-
                     <Link to="/create-post" className='hover:text-indigo-600 transition'>
                         Create Post
                     </Link>
