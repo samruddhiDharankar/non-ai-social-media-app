@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../types/user";
 import { Post } from "../types/post";
+import { formatDateTime } from "../utils/dateFormatter";
 
 function UserProfile() {
     const [userData, setUserData] = useState<User>();
@@ -68,7 +69,7 @@ function UserProfile() {
 
                             <p>{post?.text}</p>
                             <p>{post?.aiDetectionSummary}</p>
-                            <p>{post?.createdAt}</p>
+                            <p>{formatDateTime(post?.createdAt)} </p>
                             <p>.</p>
                         </div>
                     ))}
