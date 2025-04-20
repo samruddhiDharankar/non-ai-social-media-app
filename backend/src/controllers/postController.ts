@@ -17,7 +17,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
         path: "user",
         select: "username",
       },
-      select: "content username",
+      select: "content username createdAt updatedAt",
     })
     .populate({
       path: "user",

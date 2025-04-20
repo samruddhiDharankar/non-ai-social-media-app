@@ -1,9 +1,14 @@
+export interface User {
+  _id: string;
+  username: string;
+}
+
 export interface Comment {
   _id: string;
   content: string;
-  userId: string;
-  username?: string;
+  user: User;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface Post {
@@ -11,7 +16,7 @@ export interface Post {
   text: string;
   aiDetectionSummary: string;
   createdAt: string;
-  userId: string;
-  username?: string;
+  updatedAt: string;
+  user: User;
   comments: Comment[];
 }

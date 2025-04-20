@@ -19,10 +19,15 @@ export const createComment = async (
     user: user,
     content: content,
   });
+
+  // populate user details for frontend display
+  await newComment.populate("user", "username");
+
+  // add comment to the post
   await Post.findByIdAndUpdate(postId, {
     $push: { comments: newComment._id },
   });
-  res.status(201).json({ message: "comment created" });
+  res.status(201).json(newComment);
   return;
 };
 

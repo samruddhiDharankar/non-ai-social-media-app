@@ -19,7 +19,6 @@ function UserProfile() {
                     credentials: "include",
                 });
                 const data = await response.json();
-                console.log("user data", data);
                 setUserData(data);
                 setIsUserData(true);
             } catch (err) {

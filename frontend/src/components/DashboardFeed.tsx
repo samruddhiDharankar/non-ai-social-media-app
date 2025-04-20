@@ -7,7 +7,7 @@ function DashboardRoute() {
     const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
     const [commentLoading, setCommentLoading] = useState(false);
 
-    // Fetch posts and enrich with user data
+    // Fetch posts with username and comments
     useEffect(() => {
         const getFeed = async () => {
             try {
@@ -19,36 +19,13 @@ function DashboardRoute() {
                     credentials: "include",
                 });
                 const posts = await response.json();
-                console.log(posts);
                 setFeedData(posts);
-                // Enrich posts with user data
-                // const enrichedPosts = await Promise.all(posts.map(async (post: Post) => {
-                //     const userRes = await fetch(`http://localhost:3000/api/users/${post.userId}`, {
-                //         method: "GET",
-                //         headers: { "Content-Type": "application/json" },
-                //         credentials: "include",
-                //     });
-                //     const user = await userRes.json();
-
-                //     const commentsRes = await fetch(`http://localhost:3000/api/comments/${post._id}`, {
-                //         method: 'GET',
-                //         headers: { 'Content-Type': 'application/json' },
-                //         credentials: 'include',
-                //     });
-                //     const comments = await commentsRes.json();
-
-                //     return { ...post, username: user.username ?? "Unknown", comments };
-                // }));
-
-                // setFeedData(enrichedPosts);
-
             } catch (err) {
                 console.log("Error fetching posts", err);
             }
         };
 
         getFeed();
-
     }, []);
 
     // Handle adding a new comment
@@ -65,7 +42,6 @@ function DashboardRoute() {
                 body: JSON.stringify({ postId, content: comment }),
             });
             const data = await response.json();
-            console.log(data);
 
             if (response.ok) {
                 setNewComment((prev) => ({ ...prev, [postId]: "" }));  // Clear comment for only this post
@@ -99,18 +75,18 @@ function DashboardRoute() {
                             AI Summary: {feed.aiDetectionSummary}
                         </p>
                         <div className="text-sm text-gray-500 flex justify-between">
-                            <span>Posted by <span className="font-medium text-gray-700">{feed.username}</span></span>
+                            <span>Posted by <span className="font-medium text-gray-700">{feed.user.username}</span></span>
                             <span>{formatDateTime(feed.createdAt)}</span>
                         </div>
 
                         <div className="mt-4">
-                            <h3 className="text-lg font-semibold text-gray-700">Comments</h3>
+                            <h3 className="text-mg font-semibold text-gray-700">Comments</h3>
                             <div className="space-y-4 mt-2">
                                 {feed.comments && feed.comments.length > 0 ? (
                                     feed.comments.map((comment) => (
                                         <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
-                                            <p className="font-medium text-gray-800">{comment.username}</p>
-                                            <p className="text-gray-600">{comment.content}</p>
+                                            <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
+                                            <p className="text-sm text-gray-600">{comment.content}</p>
                                             <span className="text-sm text-gray-500">
                                                 {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
                                                     ? formatDateTime(comment.createdAt)
