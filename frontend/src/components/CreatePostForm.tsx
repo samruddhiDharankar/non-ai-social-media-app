@@ -1,7 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 
 function CreatePostForm() {
     const [form, setForm] = useState({ text: "" });
+    const [message, setMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,19 +23,46 @@ function CreatePostForm() {
                 body: JSON.stringify(form),
             });
             const data = await response.json();
-            console.log("user created", data);
+            if (response.ok) {
+                setMessage("Post created successfully");
+                setIsSuccess(true);
+                setForm({ text: "" });
+
+                // reset text area height
+                if (textareaRef.current) {
+                    textareaRef.current.style.height = "auto";
+                }
+            }
+            else {
+                setMessage(data.message || "Something went wrong.");
+                setIsSuccess(false)
+            }
         } catch (err) {
-            console.log("Error", err);
+            setMessage("Error creating post.");
+            setIsSuccess(false);
         }
     }
+
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => setMessage(""), 3000);
+            return () => clearTimeout(timer);
+        }
+    })
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
             <h1 className="text-2xl font-semibold text-center mb-6">Create a Post</h1>
-
+            {message && (
+                <div className={`p-2 rounded-md text-sm mb-4 ${isSuccess
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-res-100 text-red-700'
+                    }`}>{message}</div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <textarea
+                        ref={textareaRef}
                         name="text"
                         placeholder="Enter your post..."
                         value={form.text}
@@ -48,9 +78,11 @@ function CreatePostForm() {
                     />
                 </div>
 
+
+
                 <button
                     type="submit"
-                    className={`w-full py-2 rounded-md transition ${form.text.trim()
+                    className={`w-full py-5 rounded-md transition ${form.text.trim()
                         ? "bg-indigo-600 text-white hover:bg-indigo-500"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
@@ -58,6 +90,7 @@ function CreatePostForm() {
                 >
                     Create Post
                 </button>
+
             </form>
         </div>
     )

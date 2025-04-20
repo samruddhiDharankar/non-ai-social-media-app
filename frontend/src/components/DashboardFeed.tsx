@@ -59,19 +59,27 @@ function DashboardRoute() {
     }, [feedData]);
 
     return (
-        <>
-            <div className='bg-[#E5E7EB]'>
+        <div className="max-w-4xl mx-auto p-6">
+            {/* <h1 className="text-2xl font-semibold text-center mb-6">Dashboard Feed</h1> */}
+
+            <div className="space-y-6">
                 {enrichedFeedData.map((feed) => (
-                    <div key={feed._id}>
-                        <p>{feed.text}</p>
-                        <p>{feed.aiDetectionSummary}</p>
-                        <p>{formatDateTime(feed.createdAt)}</p>
-                        <p>{feed.username}</p>
-                        <p>.</p>
+                    <div
+                        key={feed._id}
+                        className="p-4 bg-white shadow-md rounded-md border border-gray-200 hover:shadow-lg transition"
+                    >
+                        <p className="text-gray-800 mb-2">{feed.text}</p>
+                        <p className="text-sm text-indigo-600 italic mb-2">
+                            AI Summary: {feed.aiDetectionSummary}
+                        </p>
+                        <div className="text-sm text-gray-500 flex justify-between">
+                            <span>Posted by <span className="font-medium text-gray-700">{feed.username}</span></span>
+                            <span>{formatDateTime(feed.createdAt)}</span>
+                        </div>
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     )
 }
 

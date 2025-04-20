@@ -6,7 +6,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
 import UserProfilePage from './pages/UserProfilePage'
-import Layout from './components/Layout'
+import Layout from './pages/Layout'
 
 function App() {
 

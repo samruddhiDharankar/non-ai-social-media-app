@@ -72,7 +72,7 @@ function UserProfile() {
                         {userPostData.map((post) => (
                             <div key={post._id} className="bg-gray-50 p-4 rounded-md border border-gray-300">
                                 <p className="text-lg">{post?.text}</p>
-                                <p className="text-sm text-gray-600">{post?.aiDetectionSummary}</p>
+                                <p className="text-sm text-indigo-600">{post?.aiDetectionSummary}</p>
                                 <p className="text-sm text-gray-400">{formatDateTime(post?.createdAt)}</p>
                             </div>
                         ))}
