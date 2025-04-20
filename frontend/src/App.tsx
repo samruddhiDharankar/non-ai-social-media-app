@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
 import UserProfilePage from './pages/UserProfilePage'
+import Layout from './components/Layout'
 
 function App() {
 
@@ -13,24 +14,32 @@ function App() {
     <>
 
       <Routes>
+        {/*Public routes*/}
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
+        {/*Private routes*/}
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <DashboardPage />
+            <Layout>
+              <DashboardPage />
+            </Layout>
           </ProtectedRoute>
         } />
 
         <Route path="/create-post" element={
           <ProtectedRoute>
-            <CreatePostPage />
+            <Layout>
+              <CreatePostPage />
+            </Layout>
           </ProtectedRoute>
         } />
 
         <Route path="/me" element={
           <ProtectedRoute>
-            <UserProfilePage />
+            <Layout>
+              <UserProfilePage />
+            </Layout>
           </ProtectedRoute>
         } />
 

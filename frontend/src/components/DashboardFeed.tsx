@@ -60,7 +60,7 @@ function DashboardRoute() {
 
     return (
         <>
-            <div>
+            <div className='bg-[#E5E7EB]'>
                 {enrichedFeedData.map((feed) => (
                     <div key={feed._id}>
                         <p>{feed.text}</p>
