@@ -62,3 +62,13 @@ export const signupUser = async (req: Request, res: Response) => {
   res.status(201).json({ message: "User created" });
   return;
 };
+
+export const logoutUser = async (req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, // change to true on production
+    sameSite: "lax",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+  return;
+};
