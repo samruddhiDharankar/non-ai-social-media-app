@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../utils/useAuthStore';
 
 
 function Navbar() {
@@ -13,6 +14,7 @@ function Navbar() {
                 credentials: "include",
             });
             const data = await response.json()
+            useAuthStore.getState().logout();
             navigate("/");
         } catch (err) {
             console.log("error", err);
