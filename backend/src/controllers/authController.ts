@@ -33,7 +33,12 @@ export const loginUserByEmailAndPassword = async (
     });
 
     // res.json({ token });
-    res.status(200).json({ message: "Logged in successfully" });
+    res
+      .status(200)
+      .json({
+        message: "Logged in successfully",
+        user: { _id: user._id, username: user.username },
+      });
     return;
   } else {
     res.status(401).json({ message: "Invalid credentials" });

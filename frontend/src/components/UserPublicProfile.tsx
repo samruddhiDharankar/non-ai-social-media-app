@@ -50,6 +50,10 @@ function UserPublicProfile() {
         fetchUserAndPosts();
     }, [username]);
 
+    const handleFollow = () => {
+
+    }
+
     return (
         <>
             <div className="space-y-4">
@@ -60,7 +64,7 @@ function UserPublicProfile() {
                     <p className="text-lg font-medium">Post Count: <span className="text-indigo-600">{userData?.postCount}</span></p>
                     <p className="text-lg font-medium">Streak Count: <span className="text-indigo-600">{userData?.streakCount}</span></p>
                     <p className="text-lg font-medium">Tier: <span className="text-indigo-600">{userData?.tier}</span></p>
-                    <button className="mt-2 w-20 p-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">Follow</button>
+                    <button onClick={handleFollow} className="mt-2 w-20 p-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">Follow</button>
                 </div>
             </div>
 

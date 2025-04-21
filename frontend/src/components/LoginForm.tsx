@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../utils/useAuthStore';
 
 function LoginForm() {
     const navigate = useNavigate();
@@ -7,6 +8,7 @@ function LoginForm() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [isLoginFailed, setIsLoginFailed] = useState(false);
     const isFormValid = form.email && form.password;
+    const setUser = useAuthStore((state) => state.setUser);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -25,10 +27,18 @@ function LoginForm() {
                 body: JSON.stringify({ ...form, email: form.email.trim() }),
             });
             const data = await response.json();
-
+            console.log(data);
             if (response.ok) {
                 console.log("Logged in");
-                navigate("/dashboard");
+                setUser({
+                    userId: data.user._id,
+                    username: data.user.username,
+                });
+
+                setTimeout(() => {
+
+                    navigate("/dashboard");
+                }, 50);
             }
             else {
                 setIsLoginFailed(true);
