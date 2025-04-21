@@ -8,40 +8,47 @@ function UserPublicProfile() {
     const { username } = useParams();
     const [userData, setUserData] = useState<User>();
     const [userPostData, setUserPostData] = useState<Post[]>([]);
-    console.log(username)
 
     useEffect(() => {
         const fetchUserAndPosts = async () => {
             try {
-                const userResponse = await fetch(`http://localhost:3000/api/users/username/${username}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                });
+                let userResponse;
+                if (username) {
+                    // Fetch other user's data
+                    userResponse = await fetch(`http://localhost:3000/api/users/username/${username}`, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    });
+                } else {
+                    // Fetch current logged-in user's data
+                    userResponse = await fetch(`http://localhost:3000/api/users/me`, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                    });
+                }
+
                 const userData = await userResponse.json();
                 if (userResponse.ok) {
                     setUserData(userData);
-                    console.log(userData._id);
-                    const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData?._id}`, {
+
+                    // Then fetch their posts
+                    const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}`, {
                         method: "GET",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
                     const postData = await postResponse.json();
-                    console.log("user post data", postData);
                     setUserPostData(postData);
                 }
             } catch (err) {
-                console.log("Error fetching user & posts", err)
+                console.error("Error fetching user & posts", err);
             }
-        }
+        };
 
         fetchUserAndPosts();
-    }, []);
+    }, [username]);
 
     return (
         <>

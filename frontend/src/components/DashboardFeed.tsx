@@ -10,6 +10,7 @@ function DashboardRoute() {
 
     // Fetch posts with username and comments
     useEffect(() => {
+        // fetch post feed data
         const getFeed = async () => {
             try {
                 const response = await fetch("http://localhost:3000/api/posts/feed", {
@@ -77,7 +78,7 @@ function DashboardRoute() {
                         </p>
                         <div className="text-sm text-gray-500 flex justify-between">
                             <span>Posted by
-                                <Link to={`/me`} >
+                                <Link to={`/${feed.user.username}`} >
                                     <span className="font-medium text-gray-700">
                                         {feed.user.username}
                                     </span>

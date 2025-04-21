@@ -5,12 +5,10 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
-import UserProfilePage from './pages/UserProfilePage'
 import Layout from './pages/Layout'
 import UserPublicProfilePage from './pages/UserPublicProfilePage'
 
 function App() {
-
   return (
     <>
 
@@ -35,14 +33,14 @@ function App() {
             </Layout>
           </ProtectedRoute>
         } />
-        {/* 
+
         <Route path="/me" element={
           <ProtectedRoute>
             <Layout>
-              <UserProfilePage />
+              <UserPublicProfilePage />
             </Layout>
           </ProtectedRoute>
-        } /> */}
+        } />
 
         <Route path="/:username" element={
           <ProtectedRoute>
@@ -53,9 +51,6 @@ function App() {
         } />
 
       </Routes>
-
-      {/* <LoginForm /> */}
-      {/* <SignupForm /> */}
     </>
   )
 }
