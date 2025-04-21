@@ -93,7 +93,9 @@ function DashboardRoute() {
                                 {feed.comments && feed.comments.length > 0 ? (
                                     feed.comments.map((comment) => (
                                         <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
-                                            <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
+                                            <Link to={`/${comment.user.username}`}>
+                                                <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
+                                            </Link>
                                             <p className="text-sm text-gray-600">{comment.content}</p>
                                             <span className="text-sm text-gray-500">
                                                 {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
