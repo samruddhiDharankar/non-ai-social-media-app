@@ -53,12 +53,19 @@ export const getFollowers = async (
     return;
   }
 
-  const followers = await Follow.find({ following: req.user.id }).populate(
-    "follower",
-    "username name"
-  );
-  res.json(followers);
-  return;
+  const targetUserId = req.query.userId || req.user.id;
+
+  try {
+    const followers = await Follow.find({ following: targetUserId }).populate(
+      "follower",
+      "username name"
+    );
+    res.json(followers);
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
+    return;
+  }
 };
 
 export const getFollowing = async (
