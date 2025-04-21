@@ -76,7 +76,7 @@ function DashboardRoute() {
                                 <p className="text-sm text-gray-400">{formatDateTime(post.createdAt)}</p>
                             </div>
                             <p className="text-lg text-gray-800">{post.text}</p>
-                            <p className="text-sm text-indigo-500 mt-1">{post.aiDetectionSummary}</p>
+                            <p className="text-sm text-purple-500 mt-1">{post.aiDetectionSummary}</p>
 
                             {/* Comments */}
                             <div className="mt-4">

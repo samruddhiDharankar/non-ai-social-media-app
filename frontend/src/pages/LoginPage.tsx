@@ -12,7 +12,7 @@ const LoginPage = () => {
     return (
         <>
             <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-pink-100 flex items-center justify-center px-4 ">
-                <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
+                <div className="max-w-100 mx-auto p-6 bg-white shadow-md rounded-lg">
                     <h2 className="text-2xl font-semibold text-center mb-6 text-pink-600">Login</h2>
                     <LoginForm />
                     <div className="mt-4 text-center">

@@ -86,14 +86,14 @@ function UserPublicProfile() {
         <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
-                <h1 className="text-3xl font-extrabold text-pink-600 mb-4 text-center">👩‍💻 {userData?.name}'s Vibe Board</h1>
+                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">👩‍💻 {userData?.username}</h1>
 
-                <div className="space-y-2 text-lg text-gray-800">
-                    <p><span className="font-bold text-purple-600">Username:</span> @{userData?.username}</p>
-                    <p><span className="font-bold text-purple-600">Badge:</span> 🏅 {userData?.badge}</p>
-                    <p><span className="font-bold text-purple-600">Posts:</span> ✏️ {userData?.postCount}</p>
-                    <p><span className="font-bold text-purple-600">Streak:</span> 🔥 {userData?.streakCount}</p>
-                    <p><span className="font-bold text-purple-600">Tier:</span> 🌟 {userData?.tier}</p>
+                <div className="space-y-2 text- text-gray-800">
+                    <p><span className="font-bold text-purple-600">Name:</span> {userData?.name}</p>
+                    <p><span className="font-bold text-purple-600">Badge:</span> {userData?.badge}</p>
+                    <p><span className="font-bold text-purple-600">Posts:</span> {userData?.postCount}</p>
+                    <p><span className="font-bold text-purple-600">Streak:</span> {userData?.streakCount}</p>
+                    <p><span className="font-bold text-purple-600">Tier:</span> {userData?.tier}</p>
                 </div>
 
                 <div className="flex gap-4 mt-4 justify-center">
@@ -118,27 +118,27 @@ function UserPublicProfile() {
                         <div className="absolute bottom-10 left-1/3 w-3 h-3 bg-purple-300 rounded-full blur-md"></div>
                     </div>
 
-                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl border-2 border-pink-300 p-6 transition-all duration-300 animate-fade-in">
+                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
                         <button
                             onClick={() => setShowFollowerModal(false)}
                             className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition"
                         >
                             ✖
                         </button>
-                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">🌟 Followers</h3>
+                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">Followers</h3>
 
-                        <div className="max-h-[300px] overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-pink-300">
+                        <div className="max-h-[300px] overflow-y-auto space-y-3">
                             {followers.length > 0 ? (
                                 followers.map((f) => (
                                     <Link key={f._id} to={`/${f.follower.username}`} onClick={() => setShowFollowerModal(false)}>
-                                        <div className="p-4 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow hover:scale-[1.02] transition transform cursor-pointer border border-pink-200">
+                                        <div className="p-4 mb-2 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow cursor-pointer ">
                                             <p className="font-bold text-gray-800">{f.follower.name}</p>
                                             <p className="text-sm text-gray-500">@{f.follower.username}</p>
                                         </div>
                                     </Link>
                                 ))
                             ) : (
-                                <p className="text-center text-gray-500">No followers yet. Be the first! 🌈</p>
+                                <p className="text-center text-gray-500">No followers yet. Be the first!</p>
                             )}
                         </div>
                     </div>
@@ -153,7 +153,7 @@ function UserPublicProfile() {
                     userPostData.map((post) => (
                         <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">
                             <p className="text-gray-700 text-lg">{post?.text}</p>
-                            <p className="text-sm text-indigo-500 mt-1">{post?.aiDetectionSummary}</p>
+                            <p className="text-sm text-purple-500 mt-1">{post?.aiDetectionSummary}</p>
                             <p className="text-xs text-gray-400">{formatDateTime(post?.createdAt)}</p>
 
                             <div className="mt-3">
