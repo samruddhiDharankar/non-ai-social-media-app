@@ -8,9 +8,7 @@ function DashboardRoute() {
     const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
     const [commentLoading, setCommentLoading] = useState(false);
 
-    // Fetch posts with username and comments
     useEffect(() => {
-        // fetch post feed data
         const getFeed = async () => {
             try {
                 const response = await fetch("http://localhost:3000/api/posts/feed", {
@@ -30,7 +28,6 @@ function DashboardRoute() {
         getFeed();
     }, []);
 
-    // Handle adding a new comment
     const handleAddComment = async (postId: string) => {
         const comment = newComment[postId]?.trim();
         if (!comment) return;
@@ -65,72 +62,64 @@ function DashboardRoute() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <div className="space-y-6">
-                {feedData.map((feed) => (
-                    <div
-                        key={feed._id}
-                        className="p-4 bg-white shadow-md rounded-md border border-gray-200 hover:shadow-lg transition"
-                    >
-                        <p className="text-gray-800 mb-2">{feed.text}</p>
-                        <p className="text-sm text-indigo-600 italic mb-2">
-                            AI Summary: {feed.aiDetectionSummary}
-                        </p>
-                        <div className="text-sm text-gray-500 flex justify-between">
-                            <span>Posted by
-                                <Link to={`/${feed.user.username}`} >
-                                    <span className="font-medium text-gray-700">
-                                        {feed.user.username}
-                                    </span>
-                                </Link>
-                            </span>
-                            <span>{formatDateTime(feed.createdAt)}</span>
-                        </div>
+        <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
+            <div className="max-w-3xl mx-auto space-y-6">
+                <h1 className="text-3xl font-extrabold text-pink-600 text-center mb-6">📌 Dashboard Feed</h1>
 
-                        <div className="mt-4">
-                            <h3 className="text-sm font-semibold text-gray-700">Comments</h3>
-                            <div className="space-y-4 mt-2">
-                                {feed.comments && feed.comments.length > 0 ? (
-                                    feed.comments.map((comment) => (
-                                        <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
-                                            <Link to={`/${comment.user.username}`}>
-                                                <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
-                                            </Link>
-                                            <p className="text-sm text-gray-600">{comment.content}</p>
-                                            <span className="text-sm text-gray-500">
-                                                {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
-                                                    ? formatDateTime(comment.createdAt)
-                                                    : "Just now"
-                                                }
-                                            </span>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-gray-500">No comments yet</p>
-                                )}
+                {feedData.length > 0 ? (
+                    feedData.map((post) => (
+                        <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">
+                            <div className="mb-2">
+                                <Link to={`/${post.user.username}`}>
+                                    <p className="font-bold text-purple-600 hover:underline">@{post.user.username}</p>
+                                </Link>
+                                <p className="text-sm text-gray-400">{formatDateTime(post.createdAt)}</p>
+                            </div>
+                            <p className="text-lg text-gray-800">{post.text}</p>
+                            <p className="text-sm text-indigo-500 mt-1">{post.aiDetectionSummary}</p>
+
+                            {/* Comments */}
+                            <div className="mt-4">
+                                <h4 className="text-md font-semibold text-gray-700">💬 Comments</h4>
+                                <div className="space-y-2 mt-2">
+                                    {post.comments?.length ? (
+                                        post.comments.map((comment) => (
+                                            <div key={comment._id} className="bg-gray-100 p-3 rounded-lg shadow-sm">
+                                                <Link to={`/${comment.user.username}`}>
+                                                    <p className="font-medium text-purple-700">@{comment.user.username}</p>
+                                                </Link>
+                                                <p className="text-sm text-gray-600">{comment.content}</p>
+                                                <p className="text-xs text-gray-500">{formatDateTime(comment.createdAt)}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-400">No comments yet 💭</p>
+                                    )}
+                                </div>
+
+                                {/* New Comment Input */}
+                                <div className="mt-4 flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Add a comment..."
+                                        value={newComment[post._id] || ""}
+                                        onChange={(e) => setNewComment(prev => ({ ...prev, [post._id]: e.target.value }))}
+                                        className="flex-1 px-4 py-2 border border-pink-200 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300 text-sm"
+                                    />
+                                    <button
+                                        onClick={() => handleAddComment(post._id)}
+                                        disabled={commentLoading}
+                                        className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-full text-sm shadow-md"
+                                    > Send
+                                        {/* {commentLoading ? '...' : 'Send'} */}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-
-                        <div className="mt-4">
-                            <textarea
-                                value={newComment[feed._id] || ""}
-                                onChange={(e) => setNewComment((prev) => ({
-                                    ...prev,
-                                    [feed._id]: e.target.value,
-                                }))}
-                                placeholder="Write a comment..."
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                            />
-                            <button
-                                onClick={() => handleAddComment(feed._id)}
-                                disabled={commentLoading}
-                                className="mt-2 w-full p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            >
-                                {commentLoading ? 'Posting...' : "Post Comment"}
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="text-center text-gray-500 text-sm mt-10">No posts yet. Follow others to see their vibes! 🌟</p>
+                )}
             </div>
         </div>
     );

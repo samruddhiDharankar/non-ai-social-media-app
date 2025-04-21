@@ -9,6 +9,9 @@ export const followUser = async (req: AuthenticatedRequest, res: Response) => {
     return;
   }
   const userId = req.user.id;
+  if (targetUserId === userId) {
+    return;
+  }
 
   // prevent duplicate follows
   const exists = await Follow.findOne({

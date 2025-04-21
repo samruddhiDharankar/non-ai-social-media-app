@@ -56,7 +56,7 @@ function SignupForm() {
                     value={form.name}
                     onChange={handleChange}
                     required
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <input
                     name="username"
@@ -64,7 +64,7 @@ function SignupForm() {
                     value={form.username}
                     onChange={handleChange}
                     required
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <input
                     name="email"
@@ -72,7 +72,7 @@ function SignupForm() {
                     value={form.email}
                     onChange={handleChange}
                     required
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <input
                     type="password"
@@ -81,20 +81,20 @@ function SignupForm() {
                     value={form.password}
                     onChange={handleChange}
                     required
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
                 <button
                     type='submit'
                     disabled={!isFormValid}
                     className={`w-full py-2 rounded-md transition ${isFormValid
-                        ? "bg-indigo-600 text-white hover:bg-indigo-500"
+                        ? "bg-pink-500 text-white hover:bg-pink-600"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     Sign Up
                 </button>
                 {isSignupFailed && (
-                    <p className="text-center text-sm text-indigo-600">Sign up failed</p>
+                    <p className="text-center text-sm text-pink-800">Sign up failed</p>
                 )}
             </form>
         </>

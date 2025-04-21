@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { User } from '../types/user';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
@@ -10,20 +10,19 @@ function UserPublicProfile() {
     const [userPostData, setUserPostData] = useState<Post[]>([]);
     const [followers, setFollowers] = useState([]);
     const [showFollowerModal, setShowFollowerModal] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserAndPosts = async () => {
             try {
                 let userResponse;
                 if (username) {
-                    // Fetch other user's data
                     userResponse = await fetch(`http://localhost:3000/api/users/username/${username}`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
                 } else {
-                    // Fetch current logged-in user's data
                     userResponse = await fetch(`http://localhost:3000/api/users/me`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
@@ -35,7 +34,6 @@ function UserPublicProfile() {
                 if (userResponse.ok) {
                     setUserData(userData);
 
-                    // Then fetch their posts
                     const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
@@ -44,6 +42,7 @@ function UserPublicProfile() {
                     const postData = await postResponse.json();
                     setUserPostData(postData);
                 }
+                setLoading(false);
             } catch (err) {
                 console.error("Error fetching user & posts", err);
             }
@@ -84,86 +83,106 @@ function UserPublicProfile() {
     }
 
     return (
-        <>
-            <div className="space-y-4">
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-300">
-                    <p className="text-lg font-medium">Name: <span className="text-indigo-600">{userData?.name}</span></p>
-                    <p className="text-lg font-medium">Username: <span className="text-indigo-600">{userData?.username}</span></p>
-                    <p className="text-lg font-medium">Badge: <span className="text-indigo-600">{userData?.badge}</span></p>
-                    <p className="text-lg font-medium">Post Count: <span className="text-indigo-600">{userData?.postCount}</span></p>
-                    <p className="text-lg font-medium">Streak Count: <span className="text-indigo-600">{userData?.streakCount}</span></p>
-                    <p className="text-lg font-medium">Tier: <span className="text-indigo-600">{userData?.tier}</span></p>
-                    <button onClick={handleFollow} className="mt-2 w-20 p-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">Follow</button>
-                    <button onClick={fetchFollowers} className="text-blue-600 underline">Followers</button>
+        <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
+            <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
-                    {showFollowerModal && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                            <div className="bg-white p-6 rounded-lg w-80 max-h-[80vh] overflow-y-auto">
-                                <h3 className="text-lg font-bold mb-4">Followers</h3>
-                                <button className="absolute top-2 right-3 text-gray-500" onClick={() => setShowFollowerModal(false)}>X</button>
+                <h1 className="text-3xl font-extrabold text-pink-600 mb-4 text-center">👩‍💻 {userData?.name}'s Vibe Board</h1>
 
-                                {followers.length > 0 ? (
-                                    followers.map((f) => (
-                                        <Link to={`/${f.follower.username}`} key={f._id}>
-                                            <div className='p-2 border-b hover:bg-gray-100 cursor-pointer'>
-                                                <p className='font-medium'>{f.follower.name}</p>
-                                                <p className='text-sm text-gray-600'>@{f.follower.username}</p>
-                                            </div>
-                                        </Link>
-                                    ))
-                                ) : (
-                                    <p className='text-sm text-gray-500'>No followers yet</p>
-                                )}
-                            </div>
-                        </div>
-                    )}
+                <div className="space-y-2 text-lg text-gray-800">
+                    <p><span className="font-bold text-purple-600">Username:</span> @{userData?.username}</p>
+                    <p><span className="font-bold text-purple-600">Badge:</span> 🏅 {userData?.badge}</p>
+                    <p><span className="font-bold text-purple-600">Posts:</span> ✏️ {userData?.postCount}</p>
+                    <p><span className="font-bold text-purple-600">Streak:</span> 🔥 {userData?.streakCount}</p>
+                    <p><span className="font-bold text-purple-600">Tier:</span> 🌟 {userData?.tier}</p>
+                </div>
 
+                <div className="flex gap-4 mt-4 justify-center">
+                    <button onClick={handleFollow}
+                        className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        ➕ Follow
+                    </button>
+                    <button onClick={fetchFollowers}
+                        className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        🙋 View Followers
+                    </button>
                 </div>
             </div>
 
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold">Posts</h2>
-                {userPostData && userPostData.length > 0 ? (
-                    <div className="space-y-4 mt-4">
-                        {userPostData.map((post) => (
-                            <div key={post._id} className="bg-gray-50 p-4 rounded-md border border-gray-300">
-                                <p className="text-lg">{post?.text}</p>
-                                <p className="text-sm text-indigo-600">{post?.aiDetectionSummary}</p>
-                                <p className="text-sm text-gray-400">{formatDateTime(post?.createdAt)}</p>
-
-                                <div className="mt-4">
-                                    <h3 className="text-sm font-semibold text-gray-700">Comments</h3>
-                                    <div className="space-y-4 mt-2">
-                                        {post.comments && post.comments.length > 0 ? (
-                                            post.comments.map((comment) => (
-                                                <div key={comment._id} className="p-2 bg-gray-100 rounded-md shadow-sm">
-                                                    <Link to={`/${comment.user.username}`}>
-                                                        <p className="text-sm font-medium text-gray-800">{comment.user?.username}</p>
-                                                    </Link>
-                                                    <p className="text-sm text-gray-600">{comment.content}</p>
-                                                    <span className="text-sm text-gray-500">
-                                                        {comment.createdAt && !isNaN(new Date(comment.createdAt).getTime())
-                                                            ? formatDateTime(comment.createdAt)
-                                                            : "Just now"
-                                                        }
-                                                    </span>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <p className="text-gray-500">No comments yet</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                            </div>
-                        ))}
+            {/* Follower Modal */}
+            {showFollowerModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-200/60 via-yellow-100/60 to-purple-200/60 backdrop-blur-md">
+                    {/* Floating shapes */}
+                    <div className="absolute inset-0 pointer-events-none animate-pulse opacity-30">
+                        <div className="absolute top-10 left-10 w-4 h-4 bg-pink-300 rounded-full blur-md"></div>
+                        <div className="absolute top-1/2 right-12 w-6 h-6 bg-yellow-300 rounded-full blur-sm"></div>
+                        <div className="absolute bottom-10 left-1/3 w-3 h-3 bg-purple-300 rounded-full blur-md"></div>
                     </div>
+
+                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl border-2 border-pink-300 p-6 transition-all duration-300 animate-fade-in">
+                        <button
+                            onClick={() => setShowFollowerModal(false)}
+                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition"
+                        >
+                            ✖
+                        </button>
+                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">🌟 Followers</h3>
+
+                        <div className="max-h-[300px] overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-pink-300">
+                            {followers.length > 0 ? (
+                                followers.map((f) => (
+                                    <Link key={f._id} to={`/${f.follower.username}`} onClick={() => setShowFollowerModal(false)}>
+                                        <div className="p-4 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow hover:scale-[1.02] transition transform cursor-pointer border border-pink-200">
+                                            <p className="font-bold text-gray-800">{f.follower.name}</p>
+                                            <p className="text-sm text-gray-500">@{f.follower.username}</p>
+                                        </div>
+                                    </Link>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500">No followers yet. Be the first! 🌈</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Posts */}
+            <div className="max-w-3xl mx-auto mt-10 space-y-6">
+                <h2 className="text-2xl font-bold text-center text-purple-600">📝 Posts</h2>
+
+                {userPostData && userPostData.length > 0 ? (
+                    userPostData.map((post) => (
+                        <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">
+                            <p className="text-gray-700 text-lg">{post?.text}</p>
+                            <p className="text-sm text-indigo-500 mt-1">{post?.aiDetectionSummary}</p>
+                            <p className="text-xs text-gray-400">{formatDateTime(post?.createdAt)}</p>
+
+                            <div className="mt-3">
+                                <h4 className="text-md font-semibold text-gray-700">💬 Comments</h4>
+                                <div className="space-y-2 mt-2">
+                                    {post.comments?.length ? (
+                                        post.comments.map((comment) => (
+                                            <div key={comment._id} className="bg-gray-100 p-3 rounded-lg shadow-sm">
+                                                <Link to={`/${comment.user.username}`}>
+                                                    <p className="font-medium text-purple-700">@{comment.user?.username}</p>
+                                                </Link>
+                                                <p className="text-sm text-gray-600">{comment.content}</p>
+                                                <p className="text-xs text-gray-500">{formatDateTime(comment.createdAt)}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-400 text-sm">No comments yet 💭</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))
                 ) : (
-                    <p className="text-center text-sm text-gray-500">No posts available</p>
+                    <p className="text-center text-sm text-gray-500 mt-4">No posts yet. Time to write something magical! ✨</p>
                 )}
             </div>
-        </>
-    )
+        </div>
+
+    );
 }
 
-export default UserPublicProfile
+export default UserPublicProfile;
