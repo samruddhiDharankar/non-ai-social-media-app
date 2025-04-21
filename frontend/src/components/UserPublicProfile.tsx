@@ -11,6 +11,8 @@ function UserPublicProfile() {
     const [followers, setFollowers] = useState([]);
     const [showFollowerModal, setShowFollowerModal] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [following, setFollowing] = useState([]);
+    const [showFollowingModal, setShowFollowingModal] = useState(false);
 
     useEffect(() => {
         const fetchUserAndPosts = async () => {
@@ -82,6 +84,22 @@ function UserPublicProfile() {
         }
     }
 
+    const fetchFollowing = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/following?userId=${userData?._id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+            });
+            const data = await response.json();
+            console.log(data);
+            setFollowing(data);
+            setShowFollowingModal(true);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
@@ -99,11 +117,15 @@ function UserPublicProfile() {
                 <div className="flex gap-4 mt-4 justify-center">
                     <button onClick={handleFollow}
                         className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                        ➕ Follow
+                        Follow
                     </button>
                     <button onClick={fetchFollowers}
                         className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                        🙋 View Followers
+                        View Followers
+                    </button>
+                    <button onClick={fetchFollowing}
+                        className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        View Following
                     </button>
                 </div>
             </div>
@@ -139,6 +161,43 @@ function UserPublicProfile() {
                                 ))
                             ) : (
                                 <p className="text-center text-gray-500">No followers yet. Be the first!</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Following Modal */}
+            {showFollowingModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-200/60 via-yellow-100/60 to-purple-200/60 backdrop-blur-md">
+                    {/* Floating shapes */}
+                    <div className="absolute inset-0 pointer-events-none animate-pulse opacity-30">
+                        <div className="absolute top-10 left-10 w-4 h-4 bg-pink-300 rounded-full blur-md"></div>
+                        <div className="absolute top-1/2 right-12 w-6 h-6 bg-yellow-300 rounded-full blur-sm"></div>
+                        <div className="absolute bottom-10 left-1/3 w-3 h-3 bg-purple-300 rounded-full blur-md"></div>
+                    </div>
+
+                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
+                        <button
+                            onClick={() => setShowFollowingModal(false)}
+                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition"
+                        >
+                            ✖
+                        </button>
+                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">Following</h3>
+
+                        <div className="max-h-[300px] overflow-y-auto space-y-3">
+                            {following.length > 0 ? (
+                                following.map((f) => (
+                                    <Link key={f._id} to={`/${f.following.username}`} onClick={() => setShowFollowingModal(false)}>
+                                        <div className="p-4 mb-2 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow cursor-pointer ">
+                                            <p className="font-bold text-gray-800">{f.following.name}</p>
+                                            <p className="text-sm text-gray-500">@{f.following.username}</p>
+                                        </div>
+                                    </Link>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-500">Not following anyone yet.</p>
                             )}
                         </div>
                     </div>

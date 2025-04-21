@@ -79,11 +79,16 @@ export const getFollowing = async (
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-
-  const following = await Follow.find({ follower: req.user.id }).populate(
-    "following",
-    "username name"
-  );
-  res.json(following);
-  return;
+  const targetUserId = req.query.userId || req.user.id;
+  try {
+    const following = await Follow.find({ follower: targetUserId }).populate(
+      "following",
+      "username name"
+    );
+    res.json(following);
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Server error", err });
+    return;
+  }
 };
