@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,32 +9,79 @@ function DashboardRoute() {
     const [feedData, setFeedData] = useState<Post[]>([]);
     const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
     const [commentLoading, setCommentLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+    const LIMIT = 10;
+
+    const fetchFeed = async (pageNumber: number) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setFeedData(prev => [...prev, ...data.posts]);
+                setHasMore(pageNumber < data.totalPages);
+            } else {
+                navigate("/");
+                useAuthStore.getState().logout();
+            }
+        } catch (err) {
+            console.log("error fetching posts", err);
+        }
+    }
 
     useEffect(() => {
-        const getFeed = async () => {
-            try {
-                const response = await fetch("http://localhost:3000/api/posts/feed", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                });
-                if (response.ok) {
-                    const posts = await response.json();
-                    setFeedData(posts);
-                } else {
-                    navigate("/");
-                    useAuthStore.getState().logout();
-                }
+        fetchFeed(page);
+    }, [page]);
 
-            } catch (err) {
-                console.log("Error fetching posts", err);
-            }
-        };
+    const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore) {
+            setPage(prev => prev + 1);
+        }
+    }, [hasMore]);
 
-        getFeed();
-    }, []);
+    useEffect(() => {
+        const observer = new IntersectionObserver(handleObserver, {
+            root: null,
+            rootMargin: "100px",
+            threshold: 1.0,
+        });
+        if (loaderRef.current) observer.observe(loaderRef.current);
+        return () => observer.disconnect();
+    }, [handleObserver]);
+
+    // useEffect(() => {
+    //     const getFeed = async () => {
+    //         try {
+    //             const response = await fetch("http://localhost:3000/api/posts/feed", {
+    //                 method: "GET",
+    //                 headers: {
+    //                     "Content-Type": "application/json"
+    //                 },
+    //                 credentials: "include",
+    //             });
+    //             if (response.ok) {
+    //                 const posts = await response.json();
+    //                 setFeedData(posts);
+    //             } else {
+    //                 navigate("/");
+    //                 useAuthStore.getState().logout();
+    //             }
+
+    //         } catch (err) {
+    //             console.log("Error fetching posts", err);
+    //         }
+    //     };
+
+    //     getFeed();
+    // }, []);
 
     const handleAddComment = async (postId: string) => {
         const comment = newComment[postId]?.trim();
@@ -128,6 +175,9 @@ function DashboardRoute() {
                 ) : (
                     <p className="text-center text-gray-500 text-sm mt-10">No posts yet. Follow others to see their vibes! 🌟</p>
                 )}
+
+                {/* Infinite scroll loader */}
+                {hasMore && <div ref={loaderRef} className='h-10' />}
             </div>
         </div>
     );

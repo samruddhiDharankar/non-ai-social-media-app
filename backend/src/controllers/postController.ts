@@ -15,7 +15,15 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
     res.status(401).json({ message: "Not authorized" });
     return;
   }
+
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const skip = (page - 1) * limit;
+  const totalPosts = await Post.countDocuments(); // for frontend pagination UI
   const posts = await Post.find({})
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
     .populate({
       path: "comments",
       populate: {
@@ -27,9 +35,14 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
     .populate({
       path: "user",
       select: "username",
-    })
-    .sort({ createdAt: -1 });
-  res.json(posts);
+    });
+
+  res.json({
+    posts,
+    currentPage: page,
+    totalPages: Math.ceil(totalPosts / limit),
+    totalPosts,
+  });
   return;
 };
 
