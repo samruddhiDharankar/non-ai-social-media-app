@@ -25,7 +25,12 @@ function DashboardRoute() {
             });
             if (response.ok) {
                 const data = await response.json();
-                setFeedData(prev => [...prev, ...data.posts]);
+                // setFeedData(prev => [...prev, ...data.posts]);
+                setFeedData(prev => {
+                    const existingIds = new Set(prev.map(p => p._id));      // to avoid duplicates
+                    const uniqueNewPosts = data.posts.filter(p => !existingIds.has(p._id));
+                    return [...prev, ...uniqueNewPosts];
+                });
                 setHasMore(pageNumber < data.totalPages);
             } else {
                 navigate("/");

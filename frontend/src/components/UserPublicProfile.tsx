@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { User } from '../types/user';
 import { Post } from '../types/post';
@@ -15,6 +15,54 @@ function UserPublicProfile() {
     const [loading, setLoading] = useState(true);
     const [following, setFollowing] = useState([]);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
+
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+    const LIMIT = 10;
+
+    const fetchUserPosts = async (pageNumber: number) => {
+        try {
+            const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+            });
+            if (postResponse.ok) {
+                const postData = await postResponse.json();
+                setUserPostData(prev => [...prev, ...postData.posts]);
+                setHasMore(pageNumber < postData.totalPages);
+                console.log(postData);
+            } else {
+                navigate("/");
+                useAuthStore.getState().logout();
+            }
+        } catch (err) {
+            console.log("error fetching posts", err);
+        }
+    }
+
+    useEffect(() => {
+        if (!userData?._id) return;
+        fetchUserPosts(page);
+    }, [userData?._id, page]);
+
+    const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore) {
+            setPage(prev => prev + 1);
+        }
+    }, [hasMore]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(handleObserver, {
+            root: null,
+            rootMargin: "100px",
+            threshold: 1.0,
+        });
+        if (loaderRef.current) observer.observe(loaderRef.current);
+        return () => observer.disconnect();
+    }, [handleObserver]);
 
     useEffect(() => {
         const fetchUserAndPosts = async () => {
@@ -37,14 +85,14 @@ function UserPublicProfile() {
                 const userData = await userResponse.json();
                 if (userResponse.ok) {
                     setUserData(userData);
-
-                    const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}`, {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
-                    });
-                    const postData = await postResponse.json();
-                    setUserPostData(postData);
+                    // fetchUserPosts(page);
+                    // const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}`, {
+                    //     method: "GET",
+                    //     headers: { "Content-Type": "application/json" },
+                    //     credentials: "include",
+                    // });
+                    // const postData = await postResponse.json();
+                    // setUserPostData(postData);
                 } else {
                     navigate("/");
                     useAuthStore.getState().logout();
@@ -243,8 +291,13 @@ function UserPublicProfile() {
                 ) : (
                     <p className="text-center text-sm text-gray-500 mt-4">No posts yet. Time to write something magical! ✨</p>
                 )}
+
+                {/* Infinite scroll loader */}
+                <div ref={loaderRef} className="text-center text-pink-500 mt-6">
+                    {hasMore ? "Loading more..." : "No more posts"}
+                </div>
             </div>
-        </div>
+        </div >
 
     );
 }

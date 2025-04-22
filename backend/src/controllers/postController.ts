@@ -21,9 +21,6 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
   const skip = (page - 1) * limit;
   const totalPosts = await Post.countDocuments(); // for frontend pagination UI
   const posts = await Post.find({})
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
     .populate({
       path: "comments",
       populate: {
@@ -35,7 +32,10 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
     .populate({
       path: "user",
       select: "username",
-    });
+    })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 
   res.json({
     posts,
@@ -43,6 +43,7 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
     totalPages: Math.ceil(totalPosts / limit),
     totalPosts,
   });
+  console.log(posts);
   return;
 };
 
@@ -128,6 +129,12 @@ export const getPostByUserId = async (
     res.status(401).json({ message: "Not authorized" });
     return;
   }
+  console.log(id);
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const skip = (page - 1) * limit;
+  const totalPosts = await Post.countDocuments({ user: id });
+
   const posts = await Post.find({ user: id })
     .populate({
       path: "comments",
@@ -137,7 +144,15 @@ export const getPostByUserId = async (
       },
       select: "content username createdAt updatedAt",
     })
-    .sort({ createdAt: -1 });
-  res.json(posts);
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+  res.json({
+    posts,
+    currentPage: page,
+    totalPages: Math.ceil(totalPosts / limit),
+    totalPosts,
+  });
+  console.log(posts);
   return;
 };
