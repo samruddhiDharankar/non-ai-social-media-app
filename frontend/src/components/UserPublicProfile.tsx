@@ -143,7 +143,7 @@ function UserPublicProfile() {
                     <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
                         <button
                             onClick={() => setShowFollowerModal(false)}
-                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition"
+                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition cursor-pointer"
                         >
                             ✖
                         </button>
@@ -180,7 +180,7 @@ function UserPublicProfile() {
                     <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
                         <button
                             onClick={() => setShowFollowingModal(false)}
-                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition"
+                            className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition cursor-pointer"
                         >
                             ✖
                         </button>
