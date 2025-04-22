@@ -15,6 +15,7 @@ function UserPublicProfile() {
     const [loading, setLoading] = useState(true);
     const [following, setFollowing] = useState([]);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
+    const [isFollowButtonValid, setIsFollowButtonValid] = useState(true);
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -65,7 +66,7 @@ function UserPublicProfile() {
     }, [handleObserver]);
 
     useEffect(() => {
-        const fetchUserAndPosts = async () => {
+        const fetchUser = async () => {         
             try {
                 let userResponse;
                 if (username) {
@@ -74,12 +75,14 @@ function UserPublicProfile() {
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
+                    setIsFollowButtonValid(true);
                 } else {
                     userResponse = await fetch(`http://localhost:3000/api/users/me`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
+                    setIsFollowButtonValid(false);
                 }
 
                 const userData = await userResponse.json();
@@ -103,7 +106,7 @@ function UserPublicProfile() {
             }
         };
 
-        fetchUserAndPosts();
+        fetchUser();
     }, [username]);
 
     const handleFollow = async () => {
@@ -118,6 +121,23 @@ function UserPublicProfile() {
             console.log(data);
         } catch (err) {
             console.log("error in following", err);
+        }
+    }
+
+    const handleUnfollow = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/unfollow`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({targetUserId : userData?._id})
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch(err) {
+            console.log("Error unfollowing", err);
         }
     }
 
@@ -157,7 +177,8 @@ function UserPublicProfile() {
         <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
-                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">👩‍💻 {userData?.username}</h1>
+                {/* Change this */}
+                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">👩‍💻 {userData?.username}</h1>     
 
                 <div className="space-y-2 text- text-gray-800">
                     <p><span className="font-bold text-purple-600">Name:</span> {userData?.name}</p>
@@ -168,7 +189,7 @@ function UserPublicProfile() {
                 </div>
 
                 <div className="flex gap-4 mt-4 justify-center">
-                    <button onClick={handleFollow}
+                    <button onClick={handleFollow} disabled={!isFollowButtonValid}
                         className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         Follow
                     </button>
@@ -179,6 +200,9 @@ function UserPublicProfile() {
                     <button onClick={fetchFollowing}
                         className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Following
+                    </button>
+                    <button onClick={handleUnfollow} disabled={!isFollowButtonValid} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        Unfollow
                     </button>
                 </div>
             </div>

@@ -36,11 +36,14 @@ export const unFollowUser = async (
   res: Response
 ) => {
   const { targetUserId } = req.body;
+
   if (!req.user) {
     res.status(401).json({ message: "Not authorized" });
     return;
   }
   const userId = req.user.id;
+
+  // if (targetUserId === userId) return;
 
   await Follow.deleteOne({ follower: userId, following: targetUserId });
   res.json({ message: "Unfollowed successfully" });
