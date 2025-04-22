@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { User } from '../types/user';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
+import { useAuthStore } from '../utils/useAuthStore';
 
 function UserPublicProfile() {
+    const navigate = useNavigate();
     const { username } = useParams();
     const [userData, setUserData] = useState<User>();
     const [userPostData, setUserPostData] = useState<Post[]>([]);
@@ -43,6 +45,9 @@ function UserPublicProfile() {
                     });
                     const postData = await postResponse.json();
                     setUserPostData(postData);
+                } else {
+                    navigate("/");
+                    useAuthStore.getState().logout();
                 }
                 setLoading(false);
             } catch (err) {

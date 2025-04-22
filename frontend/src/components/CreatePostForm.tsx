@@ -34,7 +34,7 @@ function CreatePostForm() {
                 }
             }
             else {
-                setMessage(data.message || "Something went wrong.");
+                setMessage("Something went wrong.");
                 setIsSuccess(false)
             }
         } catch (err) {

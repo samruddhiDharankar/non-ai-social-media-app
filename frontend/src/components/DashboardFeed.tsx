@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../utils/useAuthStore';
 
 function DashboardRoute() {
+    const navigate = useNavigate();
     const [feedData, setFeedData] = useState<Post[]>([]);
     const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
     const [commentLoading, setCommentLoading] = useState(false);
@@ -18,8 +20,14 @@ function DashboardRoute() {
                     },
                     credentials: "include",
                 });
-                const posts = await response.json();
-                setFeedData(posts);
+                if (response.ok) {
+                    const posts = await response.json();
+                    setFeedData(posts);
+                } else {
+                    navigate("/");
+                    useAuthStore.getState().logout();
+                }
+
             } catch (err) {
                 console.log("Error fetching posts", err);
             }

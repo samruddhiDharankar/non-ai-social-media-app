@@ -10,7 +10,11 @@ import User from "../models/User";
 // @desc Get all posts
 // @route GET /api/posts
 // @access public/protected => NEED TO DECIDE
-export const getAllPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
   const posts = await Post.find({})
     .populate({
       path: "comments",
@@ -32,7 +36,11 @@ export const getAllPosts = async (req: Request, res: Response) => {
 // @desc Get a post by id
 // @route GET /api/posts/:id
 // @access public/protected => = NEED TO DECIDE
-export const getPostById = async (req: Request, res: Response) => {
+export const getPostById = async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
   const postId = req.params.id;
   const post = await Post.findById(postId);
 
