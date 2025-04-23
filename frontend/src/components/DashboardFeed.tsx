@@ -62,31 +62,6 @@ function DashboardRoute() {
         return () => observer.disconnect();
     }, [handleObserver]);
 
-    // useEffect(() => {
-    //     const getFeed = async () => {
-    //         try {
-    //             const response = await fetch("http://localhost:3000/api/posts/feed", {
-    //                 method: "GET",
-    //                 headers: {
-    //                     "Content-Type": "application/json"
-    //                 },
-    //                 credentials: "include",
-    //             });
-    //             if (response.ok) {
-    //                 const posts = await response.json();
-    //                 setFeedData(posts);
-    //             } else {
-    //                 navigate("/");
-    //                 useAuthStore.getState().logout();
-    //             }
-
-    //         } catch (err) {
-    //             console.log("Error fetching posts", err);
-    //         }
-    //     };
-
-    //     getFeed();
-    // }, []);
 
     const handleAddComment = async (postId: string) => {
         const comment = newComment[postId]?.trim();

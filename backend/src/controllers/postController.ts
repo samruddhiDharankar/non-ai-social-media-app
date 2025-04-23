@@ -43,7 +43,7 @@ export const getAllPosts = async (req: AuthenticatedRequest, res: Response) => {
     totalPages: Math.ceil(totalPosts / limit),
     totalPosts,
   });
-  console.log(posts);
+
   return;
 };
 
@@ -129,7 +129,7 @@ export const getPostByUserId = async (
     res.status(401).json({ message: "Not authorized" });
     return;
   }
-  console.log(id);
+
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const skip = (page - 1) * limit;
@@ -153,6 +153,6 @@ export const getPostByUserId = async (
     totalPages: Math.ceil(totalPosts / limit),
     totalPosts,
   });
-  console.log(posts);
+
   return;
 };

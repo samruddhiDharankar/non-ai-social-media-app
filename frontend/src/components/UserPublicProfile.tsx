@@ -16,6 +16,7 @@ function UserPublicProfile() {
     const [following, setFollowing] = useState([]);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [isFollowButtonValid, setIsFollowButtonValid] = useState(true);
+    const [prevUserId, setPrevUserId] = useState("");
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -31,7 +32,13 @@ function UserPublicProfile() {
             });
             if (postResponse.ok) {
                 const postData = await postResponse.json();
-                setUserPostData(prev => [...prev, ...postData.posts]);
+                if (userData?._id === prevUserId) {
+                    setUserPostData(prev => [...prev, ...postData.posts]);
+                }
+                else {
+                    setUserPostData(postData.posts);
+                    setPrevUserId(userData?._id);
+                }
                 setHasMore(pageNumber < postData.totalPages);
                 console.log(postData);
             } else {
@@ -44,6 +51,7 @@ function UserPublicProfile() {
     }
 
     useEffect(() => {
+        console.log("UE ", userData?._id)
         if (!userData?._id) return;
         fetchUserPosts(page);
     }, [userData?._id, page]);
@@ -66,7 +74,7 @@ function UserPublicProfile() {
     }, [handleObserver]);
 
     useEffect(() => {
-        const fetchUser = async () => {         
+        const fetchUser = async () => {
             try {
                 let userResponse;
                 if (username) {
@@ -82,20 +90,15 @@ function UserPublicProfile() {
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
+
                     setIsFollowButtonValid(false);
                 }
 
                 const userData = await userResponse.json();
                 if (userResponse.ok) {
                     setUserData(userData);
-                    // fetchUserPosts(page);
-                    // const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}`, {
-                    //     method: "GET",
-                    //     headers: { "Content-Type": "application/json" },
-                    //     credentials: "include",
-                    // });
-                    // const postData = await postResponse.json();
-                    // setUserPostData(postData);
+                    setPage(1);
+
                 } else {
                     navigate("/");
                     useAuthStore.getState().logout();
@@ -132,11 +135,11 @@ function UserPublicProfile() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({targetUserId : userData?._id})
+                body: JSON.stringify({ targetUserId: userData?._id })
             });
             const data = await response.json();
             console.log(data);
-        } catch(err) {
+        } catch (err) {
             console.log("Error unfollowing", err);
         }
     }
@@ -149,7 +152,7 @@ function UserPublicProfile() {
                 credentials: "include",
             });
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setFollowers(data);
             setShowFollowerModal(true);
         } catch (err) {
@@ -178,7 +181,7 @@ function UserPublicProfile() {
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
                 {/* Change this */}
-                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">👩‍💻 {userData?.username}</h1>     
+                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">👩‍💻 {userData?.username}</h1>
 
                 <div className="space-y-2 text- text-gray-800">
                     <p><span className="font-bold text-purple-600">Name:</span> {userData?.name}</p>
