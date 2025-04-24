@@ -15,8 +15,8 @@ function UserPublicProfile() {
     const [loading, setLoading] = useState(true);
     const [following, setFollowing] = useState([]);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
-    const [isFollowButtonValid, setIsFollowButtonValid] = useState(true);
     const [prevUserId, setPrevUserId] = useState("");
+    const [disableFollowButtons, setDisableFollowButtons] = useState(false);
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -34,10 +34,12 @@ function UserPublicProfile() {
                 const postData = await postResponse.json();
                 if (userData?._id === prevUserId) {
                     setUserPostData(prev => [...prev, ...postData.posts]);
+
                 }
                 else {
                     setUserPostData(postData.posts);
                     setPrevUserId(userData?._id);
+
                 }
                 setHasMore(pageNumber < postData.totalPages);
                 console.log(postData);
@@ -83,15 +85,16 @@ function UserPublicProfile() {
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
-                    setIsFollowButtonValid(true);
+                    setDisableFollowButtons(false);
                 } else {
                     userResponse = await fetch(`http://localhost:3000/api/users/me`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
+                    setDisableFollowButtons(true);
 
-                    setIsFollowButtonValid(false);
+
                 }
 
                 const userData = await userResponse.json();
@@ -191,11 +194,18 @@ function UserPublicProfile() {
                     <p><span className="font-bold text-purple-600">Tier:</span> {userData?.tier}</p>
                 </div>
 
-                <div className="flex gap-4 mt-4 justify-center">
-                    <button onClick={handleFollow} disabled={!isFollowButtonValid}
-                        className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                        Follow
-                    </button>
+                <div className="flex gap-4 mt-4 justify-center flex-wrap">
+                    {!disableFollowButtons && (
+                        <>
+                            <button onClick={handleFollow}
+                                className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                Follow
+                            </button>
+                            <button onClick={handleUnfollow} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                Unfollow
+                            </button>
+                        </>
+                    )}
                     <button onClick={fetchFollowers}
                         className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Followers
@@ -204,9 +214,7 @@ function UserPublicProfile() {
                         className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Following
                     </button>
-                    <button onClick={handleUnfollow} disabled={!isFollowButtonValid} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                        Unfollow
-                    </button>
+
                 </div>
             </div>
 
