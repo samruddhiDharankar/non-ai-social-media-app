@@ -17,6 +17,7 @@ function UserPublicProfile() {
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [prevUserId, setPrevUserId] = useState("");
     const [disableFollowButtons, setDisableFollowButtons] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
 
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -53,7 +54,6 @@ function UserPublicProfile() {
     }
 
     useEffect(() => {
-        console.log("UE ", userData?._id)
         if (!userData?._id) return;
         fetchUserPosts(page);
     }, [userData?._id, page]);
@@ -93,14 +93,27 @@ function UserPublicProfile() {
                         credentials: "include",
                     });
                     setDisableFollowButtons(true);
-
-
                 }
 
                 const userData = await userResponse.json();
                 if (userResponse.ok) {
                     setUserData(userData);
                     setPage(1);
+
+                    try {
+                        const response = await fetch(`http://localhost:3000/api/followers?userId=${userData?._id}`, {
+                            method: "GET",
+                            headers: { "Content-Type": "application/json" },
+                            credentials: "include",
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            setIsFollowing(data.some((item: any) => item.follower._id === useAuthStore.getState().user?.userId));
+                            setFollowers(data);
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
 
                 } else {
                     navigate("/");
@@ -124,7 +137,8 @@ function UserPublicProfile() {
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
             const data = await response.json();
-            console.log(data);
+            setIsFollowing(true);
+            // setFollowers(prev => [...prev, { follower: useAuthStore.getState().user }]);
         } catch (err) {
             console.log("error in following", err);
         }
@@ -141,26 +155,14 @@ function UserPublicProfile() {
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
             const data = await response.json();
-            console.log(data);
+            setIsFollowing(false);
         } catch (err) {
             console.log("Error unfollowing", err);
         }
     }
 
-    const fetchFollowers = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/api/followers?userId=${userData?._id}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            });
-            const data = await response.json();
-            // console.log(data);
-            setFollowers(data);
-            setShowFollowerModal(true);
-        } catch (err) {
-            console.log(err);
-        }
+    const handleFetchFollowersButton = async () => {
+        setShowFollowerModal(true);
     }
 
     const fetchFollowing = async () => {
@@ -171,7 +173,6 @@ function UserPublicProfile() {
                 credentials: "include",
             });
             const data = await response.json();
-            console.log(data);
             setFollowing(data);
             setShowFollowingModal(true);
         } catch (err) {
@@ -197,16 +198,20 @@ function UserPublicProfile() {
                 <div className="flex gap-4 mt-4 justify-center flex-wrap">
                     {!disableFollowButtons && (
                         <>
-                            <button onClick={handleFollow}
-                                className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                                Follow
-                            </button>
-                            <button onClick={handleUnfollow} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
-                                Unfollow
-                            </button>
+                            {isFollowing ? (
+                                <button onClick={handleUnfollow} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                    Unfollow
+                                </button>
+                            ) : (
+                                <button onClick={handleFollow}
+                                    className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                    Follow
+                                </button>
+                            )}
                         </>
                     )}
-                    <button onClick={fetchFollowers}
+
+                    <button onClick={handleFetchFollowersButton}
                         className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Followers
                     </button>
