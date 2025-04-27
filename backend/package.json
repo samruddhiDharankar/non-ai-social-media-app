@@ -4,9 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "dotenv -e .env ts-node src/index.ts",
-    "start": "dotenv -e .env.production ts-node src/index.ts",
-    "worker": "dotenv -e .env -- ts-node src/queues/aiWorker.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node build/index.ts",
+    "worker": "node build/queues/aiWorker.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
