@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${VITE_API_URL}/api/users/me`, {
+        const response = await fetch(`${VITE_API_URL}/users/me`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -16,7 +16,7 @@ function DashboardRoute() {
 
     const fetchFeed = async (pageNumber: number) => {
         try {
-            const response = await fetch(`${VITE_API_URL}/api/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
+            const response = await fetch(`${VITE_API_URL}/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -69,7 +69,7 @@ function DashboardRoute() {
         setCommentLoading(true);
 
         try {
-            const response = await fetch(`${VITE_API_URL}/api/comments/`, {
+            const response = await fetch(`${VITE_API_URL}/comments/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

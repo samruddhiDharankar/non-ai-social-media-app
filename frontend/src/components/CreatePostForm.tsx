@@ -15,7 +15,7 @@ function CreatePostForm() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${VITE_API_URL}/api/posts/`, {
+            const response = await fetch(`${VITE_API_URL}/posts/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

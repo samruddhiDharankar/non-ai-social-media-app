@@ -9,7 +9,7 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await fetch(`${VITE_API_URL}/api/auth/logout`, {
+            await fetch(`${VITE_API_URL}/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             });
