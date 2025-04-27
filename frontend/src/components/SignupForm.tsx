@@ -12,6 +12,7 @@ function SignupForm() {
     });
 
     const [isSignupFailed, setIsSignupFailed] = useState(false);
+    const [signupErrorMessage, setSignupErrorMessage] = useState("");
 
     const isFormValid = form.name.trim() && form.username.trim() && form.email.trim() && form.password.trim();
 
@@ -31,21 +32,19 @@ function SignupForm() {
                 credentials: "include", // required to include cookies
                 body: JSON.stringify(form),
             });
-            // const data = await response.json();
+            const data = await response.json();
 
             if (response.ok) {
-                console.log("Signed up");
                 navigate("/");  // navigates to login
             }
             else {
+                setSignupErrorMessage(data.message);
                 setIsSignupFailed(true);
             }
         } catch (err) {
-            console.log("Error", err);
+            setSignupErrorMessage("Signup failed");
             setIsSignupFailed(true);
         }
-
-        console.log("Signed up", form);
     }
 
     return (
@@ -95,7 +94,7 @@ function SignupForm() {
                     Sign Up
                 </button>
                 {isSignupFailed && (
-                    <p className="text-center text-sm text-pink-800">Sign up failed</p>
+                    <p className="text-center text-sm text-pink-800">{signupErrorMessage}</p>
                 )}
             </form>
         </>
