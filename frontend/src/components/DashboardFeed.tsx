@@ -35,6 +35,7 @@ function DashboardRoute() {
             } else {
                 navigate("/");
                 useAuthStore.getState().logout();
+                console.log("Logout triggered:");
             }
         } catch (err) {
             console.log("error fetching posts", err);
