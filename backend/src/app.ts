@@ -16,7 +16,13 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // your frontend port
+app.use(
+  cors({
+    origin:
+      "https://non-ai-social-media-ouof3827m-samruddhidharankars-projects.vercel.app/",
+    credentials: true,
+  })
+); // your frontend port
 
 // Routes
 app.use("/api/auth", authRoutes);
