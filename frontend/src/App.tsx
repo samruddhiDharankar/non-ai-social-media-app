@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
 import ProtectedRoute from './components/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -9,6 +8,7 @@ import Layout from './pages/Layout'
 import UserPublicProfilePage from './pages/UserPublicProfilePage'
 import { useEffect } from 'react'
 import { useAuthStore } from './utils/useAuthStore'
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/users/me", {
+        const response = await fetch(`${VITE_API_URL}/api/users/me`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

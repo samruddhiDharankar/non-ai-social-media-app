@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 function CreatePostForm() {
     const [form, setForm] = useState({ text: "" });
     const [message, setMessage] = useState("");
@@ -14,7 +14,7 @@ function CreatePostForm() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/api/posts/", {
+            const response = await fetch(`${VITE_API_URL}/api/posts/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

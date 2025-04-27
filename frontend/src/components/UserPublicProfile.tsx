@@ -4,6 +4,7 @@ import { User } from '../types/user';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { useAuthStore } from '../utils/useAuthStore';
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ function UserPublicProfile() {
 
     const fetchUserPosts = async (pageNumber: number) => {
         try {
-            const postResponse = await fetch(`http://localhost:3000/api/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
+            const postResponse = await fetch(`${VITE_API_URL}/api/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -80,14 +81,14 @@ function UserPublicProfile() {
             try {
                 let userResponse;
                 if (username) {
-                    userResponse = await fetch(`http://localhost:3000/api/users/username/${username}`, {
+                    userResponse = await fetch(`${VITE_API_URL}/api/users/username/${username}`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
                     setDisableFollowButtons(false);
                 } else {
-                    userResponse = await fetch(`http://localhost:3000/api/users/me`, {
+                    userResponse = await fetch(`${VITE_API_URL}/api/users/me`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
@@ -101,7 +102,7 @@ function UserPublicProfile() {
                     setPage(1);
 
                     try {
-                        const response = await fetch(`http://localhost:3000/api/followers?userId=${userData?._id}`, {
+                        const response = await fetch(`${VITE_API_URL}/api/followers?userId=${userData?._id}`, {
                             method: "GET",
                             headers: { "Content-Type": "application/json" },
                             credentials: "include",
@@ -130,7 +131,7 @@ function UserPublicProfile() {
 
     const handleFollow = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/follow`, {
+            const response = await fetch(`${VITE_API_URL}/api/follow`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -146,7 +147,7 @@ function UserPublicProfile() {
 
     const handleUnfollow = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/unfollow`, {
+            const response = await fetch(`${VITE_API_URL}/api/unfollow`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -167,7 +168,7 @@ function UserPublicProfile() {
 
     const fetchFollowing = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/following?userId=${userData?._id}`, {
+            const response = await fetch(`${VITE_API_URL}/api/following?userId=${userData?._id}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

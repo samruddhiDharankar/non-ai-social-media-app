@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 function SignupForm() {
     const navigate = useNavigate();
     const [form, setForm] = useState({
@@ -22,7 +22,7 @@ function SignupForm() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/api/auth/signup", {
+            const response = await fetch(`${VITE_API_URL}/api/auth/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

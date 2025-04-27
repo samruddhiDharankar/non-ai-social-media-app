@@ -3,7 +3,7 @@ import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 function DashboardRoute() {
     const navigate = useNavigate();
     const [feedData, setFeedData] = useState<Post[]>([]);
@@ -16,7 +16,7 @@ function DashboardRoute() {
 
     const fetchFeed = async (pageNumber: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
+            const response = await fetch(`${VITE_API_URL}/api/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -69,7 +69,7 @@ function DashboardRoute() {
         setCommentLoading(true);
 
         try {
-            const response = await fetch("http://localhost:3000/api/comments/", {
+            const response = await fetch(`${VITE_API_URL}/api/comments/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

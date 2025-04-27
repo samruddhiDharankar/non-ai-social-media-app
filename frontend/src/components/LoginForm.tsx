@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
-
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 function LoginForm() {
     const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ function LoginForm() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/api/auth/login", {
+            const response = await fetch(`${VITE_API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
