@@ -28,7 +28,7 @@ export const loginUserByEmailAndPassword = async (
     res.cookie("token", token, {
       httpOnly: true, // Prevents client-side JS access
       secure: true, // set to true in production with https
-      sameSite: "lax", // Helps mitigate CSRF attacks
+      sameSite: "none", // Helps mitigate CSRF attacks
       maxAge: 1 * 1 * 60 * 60 * 1000, // 1hr
     });
 
@@ -70,7 +70,7 @@ export const logoutUser = async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true, // set to true in production with https
-    sameSite: "lax",
+    sameSite: "none",
   });
   res.status(200).json({ message: "Logged out successfully" });
   return;
