@@ -3,6 +3,7 @@ import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
+import TierAndPerksInfo from './TierAndPerksInfo';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 function DashboardRoute() {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ function DashboardRoute() {
     const loaderRef = useRef<HTMLDivElement | null>(null);
     const LIMIT = 10;
     const isInitialLoad = useRef(true);
+    const [showTierInfoModal, setShowTierInfoModal] = useState(false);
+    const { tierInfoSeen, setTierInfoSeen } = useAuthStore();
 
     const fetchFeed = async (pageNumber: number) => {
         try {
@@ -48,11 +51,20 @@ function DashboardRoute() {
         if (isInitialLoad.current) {
             fetchFeed(page);    // first load
             isInitialLoad.current = false;  // prevent further first-time loads
+
+            if (!tierInfoSeen) {
+                setShowTierInfoModal(true);
+            }
         } else {
             fetchFeed(page);    // fetch when page changes
         }
 
-    }, [page]);
+    }, [page, tierInfoSeen]);
+
+    const closeTierInfoModal = () => {
+        setShowTierInfoModal(false);
+        setTierInfoSeen();
+    }
 
     const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
         const target = entries[0];
@@ -107,9 +119,12 @@ function DashboardRoute() {
 
     return (
         <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
+            {showTierInfoModal && (
+                <TierAndPerksInfo isVisible={showTierInfoModal} closeModal={closeTierInfoModal} />
+            )}
             <div className="max-w-3xl mx-auto space-y-6">
-                <h1 className="text-3xl font-extrabold text-pink-600 text-center mb-6">📌 Dashboard Feed</h1>
 
+                <h1 className="text-3xl font-extrabold text-pink-600 text-center mb-6">📌 Dashboard Feed</h1>
                 {feedData.length > 0 ? (
                     feedData.map((post) => (
                         <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">
@@ -167,6 +182,7 @@ function DashboardRoute() {
 
                 {/* Infinite scroll loader */}
                 {hasMore && <div ref={loaderRef} className='h-10' />}
+
             </div>
         </div>
     );

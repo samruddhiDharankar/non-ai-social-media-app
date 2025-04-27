@@ -3,64 +3,92 @@ import { Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import { getAverageAuthScore } from "../services/userService";
 import { getUserTier } from "../utils/tierUtils";
+import logger from "../logger";
 
 export const getUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const users = await User.find();
-  res.json(users);
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
-  const userId = req.params.id;
-  const user = await User.findById(userId);
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
 
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      logger.warn(`User not found userId: ${userId}`);
+    }
+
+    res.json(user);
+    return;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
+    res.status(500).json({ message: "Internal server error" });
   }
-
-  res.json(user);
-  return;
 };
 
 export const getUserByUsername = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
-  const { username } = req.params;
-  const user = await User.findOne({ username: username });
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      logger.warn(`User not found username: ${username}`);
+    }
+    res.json(user);
+    return;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
+    res.status(500).json({ message: "Internal server error" });
   }
-  res.json(user);
-  return;
 };
 
 export const getMe = async (
   req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
-  if (!req.user) {
-    res.status(401).json({ message: "Not authorized" });
-    return;
-  }
-
-  const avgScore = await getAverageAuthScore(req.user?.id);
-  const { tier, badge } = await getUserTier(avgScore);
-
-  const updatedUser = await User.findByIdAndUpdate(
-    { _id: req.user.id },
-    {
-      $set: {
-        averageAuthScore: +avgScore.toFixed(2),
-        tier: tier,
-        badge: badge,
-      },
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: "Not authorized" });
+      logger.error(`Not authorized`);
+      return;
     }
-  );
 
-  res.json(updatedUser);
-  return;
+    const avgScore = await getAverageAuthScore(req.user?.id);
+    const { tier, badge } = await getUserTier(avgScore);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: req.user.id },
+      {
+        $set: {
+          averageAuthScore: +avgScore.toFixed(2),
+          tier: tier,
+          badge: badge,
+        },
+      }
+    );
+
+    res.json(updatedUser);
+    return;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

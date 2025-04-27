@@ -5,6 +5,7 @@ import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { useAuthStore } from '../utils/useAuthStore';
 import { Follow } from '../types/follow';
+import TierAndPerksInfo from './TierAndPerksInfo';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
@@ -25,6 +26,12 @@ function UserPublicProfile() {
     const [hasMore, setHasMore] = useState(true);
     const loaderRef = useRef<HTMLDivElement | null>(null);
     const LIMIT = 10;
+
+    const [showTierInfoModal, setShowTierInfoModal] = useState(false);
+
+    const closeTierInfoModal = () => {
+        setShowTierInfoModal(false);
+    }
 
     const fetchUserPosts = async (pageNumber: number) => {
         try {
@@ -197,8 +204,17 @@ function UserPublicProfile() {
                     <p><span className="font-bold text-purple-600">Badge:</span> {userData?.badge}</p>
                     <p><span className="font-bold text-purple-600">Posts:</span> {userData?.postCount}</p>
                     <p><span className="font-bold text-purple-600">Streak:</span> {userData?.streakCount}</p>
-                    <p><span className="font-bold text-purple-600">Tier:</span> {userData?.tier}</p>
+                    <p>
+                        <span className="font-bold text-purple-600">Tier:</span> {userData?.tier}
+                        <button onClick={() => setShowTierInfoModal(true)}
+                            className='text-pink-500 hover:text-pink-700'
+                            title='View Tier Info'
+                        >ℹ️</button>
+                    </p>
                 </div>
+                {showTierInfoModal && (
+                    <TierAndPerksInfo isVisible={showTierInfoModal} closeModal={closeTierInfoModal} />
+                )}
 
                 <div className="flex gap-4 mt-4 justify-center flex-wrap">
                     {!disableFollowButtons && (
