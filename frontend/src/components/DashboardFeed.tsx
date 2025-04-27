@@ -13,6 +13,7 @@ function DashboardRoute() {
     const [hasMore, setHasMore] = useState(true);
     const loaderRef = useRef<HTMLDivElement | null>(null);
     const LIMIT = 10;
+    const isInitialLoad = useRef(true);
 
     const fetchFeed = async (pageNumber: number) => {
         try {
@@ -42,8 +43,15 @@ function DashboardRoute() {
         }
     }
 
+    // ensure fetch happens on first load or when page changes
     useEffect(() => {
-        fetchFeed(page);
+        if (isInitialLoad.current) {
+            fetchFeed(page);    // first load
+            isInitialLoad.current = false;  // prevent further first-time loads
+        } else {
+            fetchFeed(page);    // fetch when page changes
+        }
+
     }, [page]);
 
     const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
