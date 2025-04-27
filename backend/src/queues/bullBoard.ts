@@ -4,7 +4,7 @@ import { BullMQAdapter } from "@bull-board/api/bullMQAdapter.js";
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
 
-const connection = new IORedis();
+const connection = new IORedis(process.env.UPSTASH_REDIS_URL as string);
 
 const aiQueue = new Queue("ai-processing", { connection });
 

@@ -5,7 +5,9 @@ import mongoose from "mongoose";
 import { analyzeTextContent } from "../services/aiScoringService";
 import Post from "../models/Post";
 
-const connection = new IORedis({ maxRetriesPerRequest: null });
+const connection = new IORedis(process.env.UPSTASH_REDIS_URL as string, {
+  maxRetriesPerRequest: null,
+});
 
 const startWorker = async () => {
   try {
