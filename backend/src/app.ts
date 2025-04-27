@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://non-ai-social-media-app.vercel.app",
+    origin: process.env.FRONTEND_URL as string,
     credentials: true,
   })
 ); // your frontend port

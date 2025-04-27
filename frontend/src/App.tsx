@@ -21,6 +21,7 @@ function App() {
           credentials: "include",
         });
         if (response.ok) {
+
           const userData = await response.json();
           setUser({
             userId: userData._id,
