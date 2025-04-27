@@ -1,37 +1,28 @@
 import app from "./app";
 import { connectDB } from "./config/db";
+import logger from "./logger";
 import { startWorker } from "./queues/aiWorker";
 
 const port = process.env.PORT || 5000;
+const baseUrl = process.env.BASE_URL || "http://localhost";
 
 const startServer = async () => {
   try {
     await connectDB();
-    console.log("MongoDB connected");
+    logger.info("MongoDB connected");
 
     // start worker
     startWorker();
-    console.log("AI worker started");
+    logger.info("AI worker started");
 
     // Start the Express server
     app.listen(port, () => {
-      console.log(`Server running on port http://localhost:${port}`);
-      console.log(
-        `Bull Board available at http://localhost:${port}/admin/queues`
-      );
+      logger.info(`Server running on port ${baseUrl}:${port}`);
+      logger.info(`Bull Board available at ${baseUrl}:${port}/admin/queues`);
     });
   } catch (err) {
-    console.error("Error starting the server:", err);
+    logger.error(`Error starting the server: ${err}`);
   }
 };
 
 startServer();
-
-// connectDB().then(() => {
-//   app.listen(port, () => {
-//     console.log(`Server running on port http://localhost:${port}`);
-//     console.log(
-//       `Bull Board available at http://localhost:${port}/admin/queues`
-//     );
-//   });
-// });
