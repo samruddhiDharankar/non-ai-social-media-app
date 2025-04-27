@@ -6,36 +6,36 @@ import DashboardPage from './pages/DashboardPage'
 import CreatePostPage from './pages/CreatePostPage'
 import Layout from './pages/Layout'
 import UserPublicProfilePage from './pages/UserPublicProfilePage'
-import { useEffect } from 'react'
-import { useAuthStore } from './utils/useAuthStore'
-const VITE_API_URL = import.meta.env.VITE_API_URL;
+// import { useEffect } from 'react'
+// import { useAuthStore } from './utils/useAuthStore'
+// const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
-  const setUser = useAuthStore((state) => state.setUser);
+  // const setUser = useAuthStore((state) => state.setUser);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(`${VITE_API_URL}/users/me`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        if (response.ok) {
-          const userData = await response.json();
-          setUser({
-            userId: userData._id,
-            username: userData.username,
-          });
-        }
-      } catch (err) {
-        console.log("Error loading user", err);
-      }
-    }
-    fetchUser();
-  }, [setUser]);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await fetch(`${VITE_API_URL}/users/me`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include",
+  //       });
+  //       if (response.ok) {
+  //         const userData = await response.json();
+  //         setUser({
+  //           userId: userData._id,
+  //           username: userData.username,
+  //         });
+  //       }
+  //     } catch (err) {
+  //       console.log("Error loading user", err);
+  //     }
+  //   }
+  //   fetchUser();
+  // }, [setUser]);
 
 
 
