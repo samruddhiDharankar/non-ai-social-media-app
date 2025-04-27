@@ -8,7 +8,7 @@ function LoginForm() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [isLoginFailed, setIsLoginFailed] = useState(false);
     const isFormValid = form.email && form.password;
-    // const setUser = useAuthStore((state) => state.setUser);
+    const setUser = useAuthStore((state) => state.setUser);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -30,14 +30,14 @@ function LoginForm() {
             console.log(data);
             if (response.ok) {
                 console.log("Logged in");
-                useAuthStore.getState().setUser({
-                    userId: data.user._id,
-                    username: data.user.username,
-                });
-                // setUser({
+                // useAuthStore.getState().setUser({
                 //     userId: data.user._id,
                 //     username: data.user.username,
                 // });
+                setUser({
+                    userId: data.user._id,
+                    username: data.user.username,
+                });
 
                 setTimeout(() => {
 

@@ -18,8 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: true,
-    // "https://non-ai-social-media-ouof3827m-samruddhidharankars-projects.vercel.app",
+    origin: "https://non-ai-social-media-app.vercel.app",
     credentials: true,
   })
 ); // your frontend port
