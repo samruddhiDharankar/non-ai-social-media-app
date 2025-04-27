@@ -43,7 +43,7 @@ function UserPublicProfile() {
 
                 }
                 setHasMore(pageNumber < postData.totalPages);
-                console.log(postData);
+
             } else {
                 navigate("/");
                 useAuthStore.getState().logout();
