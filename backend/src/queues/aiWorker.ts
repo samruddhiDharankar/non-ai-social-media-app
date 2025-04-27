@@ -9,11 +9,11 @@ const connection = new IORedis(process.env.UPSTASH_REDIS_URL as string, {
   maxRetriesPerRequest: null,
 });
 
-const startWorker = async () => {
+export const startWorker = async () => {
   try {
     // mongoose.set("debug", true);
-    await mongoose.connect(process.env.MONGO_URI as string);
-    console.log("MongoDB connected");
+    // await mongoose.connect(process.env.MONGO_URI as string);
+    // console.log("MongoDB connected");
 
     const aiWorker = new Worker(
       "ai-processing",
@@ -73,4 +73,4 @@ const startWorker = async () => {
   }
 };
 
-startWorker();
+// startWorker();
