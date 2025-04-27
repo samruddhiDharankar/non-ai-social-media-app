@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -30,7 +31,7 @@ function SignupForm() {
                 credentials: "include", // required to include cookies
                 body: JSON.stringify(form),
             });
-            const data = await response.json();
+            // const data = await response.json();
 
             if (response.ok) {
                 console.log("Signed up");

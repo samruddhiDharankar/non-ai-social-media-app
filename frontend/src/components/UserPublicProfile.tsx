@@ -4,6 +4,7 @@ import { User } from '../types/user';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';
 import { useAuthStore } from '../utils/useAuthStore';
+import { Follow } from '../types/follow';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
@@ -11,10 +12,10 @@ function UserPublicProfile() {
     const { username } = useParams();
     const [userData, setUserData] = useState<User>();
     const [userPostData, setUserPostData] = useState<Post[]>([]);
-    const [followers, setFollowers] = useState([]);
+    const [followers, setFollowers] = useState<Follow[]>([]);
     const [showFollowerModal, setShowFollowerModal] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [following, setFollowing] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    const [following, setFollowing] = useState<Follow[]>([]);
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [prevUserId, setPrevUserId] = useState("");
     const [disableFollowButtons, setDisableFollowButtons] = useState(false);
@@ -27,27 +28,30 @@ function UserPublicProfile() {
 
     const fetchUserPosts = async (pageNumber: number) => {
         try {
-            const postResponse = await fetch(`${VITE_API_URL}/api/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            });
-            if (postResponse.ok) {
-                const postData = await postResponse.json();
-                if (userData?._id === prevUserId) {
-                    setUserPostData(prev => [...prev, ...postData.posts]);
+            if (userData) {
+                const postResponse = await fetch(`${VITE_API_URL}/api/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                });
 
+                if (postResponse.ok) {
+                    const postData = await postResponse.json();
+                    if (userData?._id === prevUserId) {
+                        setUserPostData(prev => [...prev, ...postData.posts]);
+
+                    }
+                    else {
+                        setUserPostData(postData.posts);
+                        setPrevUserId(userData?._id);
+
+                    }
+                    setHasMore(pageNumber < postData.totalPages);
+
+                } else {
+                    navigate("/");
+                    useAuthStore.getState().logout();
                 }
-                else {
-                    setUserPostData(postData.posts);
-                    setPrevUserId(userData?._id);
-
-                }
-                setHasMore(pageNumber < postData.totalPages);
-
-            } else {
-                navigate("/");
-                useAuthStore.getState().logout();
             }
         } catch (err) {
             console.log("error fetching posts", err);
@@ -120,7 +124,7 @@ function UserPublicProfile() {
                     navigate("/");
                     useAuthStore.getState().logout();
                 }
-                setLoading(false);
+                // setLoading(false);
             } catch (err) {
                 console.error("Error fetching user & posts", err);
             }
@@ -131,13 +135,13 @@ function UserPublicProfile() {
 
     const handleFollow = async () => {
         try {
-            const response = await fetch(`${VITE_API_URL}/api/follow`, {
+            await fetch(`${VITE_API_URL}/api/follow`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
-            const data = await response.json();
+            // const data = await response.json();
             setIsFollowing(true);
             // setFollowers(prev => [...prev, { follower: useAuthStore.getState().user }]);
         } catch (err) {
@@ -147,7 +151,7 @@ function UserPublicProfile() {
 
     const handleUnfollow = async () => {
         try {
-            const response = await fetch(`${VITE_API_URL}/api/unfollow`, {
+            await fetch(`${VITE_API_URL}/api/unfollow`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -155,7 +159,7 @@ function UserPublicProfile() {
                 credentials: "include",
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
-            const data = await response.json();
+            // const data = await response.json();
             setIsFollowing(false);
         } catch (err) {
             console.log("Error unfollowing", err);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
@@ -8,11 +9,11 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch(`${VITE_API_URL}/api/auth/logout`, {
+            await fetch(`${VITE_API_URL}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             });
-            const data = await response.json();
+            // const data = await response.json();
             useAuthStore.getState().logout();
             navigate("/");
         } catch (err) {

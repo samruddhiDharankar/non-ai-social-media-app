@@ -28,7 +28,7 @@ function DashboardRoute() {
                 // setFeedData(prev => [...prev, ...data.posts]);
                 setFeedData(prev => {
                     const existingIds = new Set(prev.map(p => p._id));      // to avoid duplicates
-                    const uniqueNewPosts = data.posts.filter(p => !existingIds.has(p._id));
+                    const uniqueNewPosts = data.posts.filter((p: { _id: string; }) => !existingIds.has(p._id));
                     return [...prev, ...uniqueNewPosts];
                 });
                 setHasMore(pageNumber < data.totalPages);

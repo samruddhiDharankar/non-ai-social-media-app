@@ -1,4 +1,4 @@
-import React from 'react'
+
 import UserPublicProfile from '../components/UserPublicProfile'
 
 function UserPublicProfilePage() {

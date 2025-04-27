@@ -1,4 +1,5 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 function CreatePostForm() {
     const [form, setForm] = useState({ text: "" });
@@ -6,7 +7,7 @@ function CreatePostForm() {
     const [isSuccess, setIsSuccess] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
@@ -22,7 +23,7 @@ function CreatePostForm() {
                 credentials: "include", // required to include cookies
                 body: JSON.stringify(form),
             });
-            const data = await response.json();
+            // const data = await response.json();
             if (response.ok) {
                 setMessage("Post created successfully");
                 setIsSuccess(true);
