@@ -4,6 +4,11 @@ import winston from "winston";
 const logFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.printf(({ timestamp, level, message }) => {
+    if (level === "error") {
+      const stack = new Error().stack?.split("\n")[3];
+      const caller = stack ? stack.trim() : "unknown file";
+      return `${timestamp} ${level} ${message} (called from ${caller})`;
+    }
     return `${timestamp} ${level} ${message}`;
   })
 );
