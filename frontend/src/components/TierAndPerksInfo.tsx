@@ -4,7 +4,6 @@ type TierAndPerksInfoProps = {
 }
 
 function TierAndPerksInfo({ isVisible, closeModal }: TierAndPerksInfoProps) {
-    console.log("tier");
     if (!isVisible) return null;
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-80 backdrop-blur-sm mt-20">
