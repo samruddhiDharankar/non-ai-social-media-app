@@ -30,10 +30,14 @@ function LoginForm() {
             console.log(data);
             if (response.ok) {
                 console.log("Logged in");
-                setUser({
+                useAuthStore.getState().setUser({
                     userId: data.user._id,
                     username: data.user.username,
                 });
+                // setUser({
+                //     userId: data.user._id,
+                //     username: data.user.username,
+                // });
 
                 setTimeout(() => {
 
