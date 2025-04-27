@@ -8,7 +8,7 @@ function LoginForm() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [isLoginFailed, setIsLoginFailed] = useState(false);
     const isFormValid = form.email && form.password;
-    const setUser = useAuthStore((state) => state.setUser);
+    // const setUser = useAuthStore((state) => state.setUser);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
