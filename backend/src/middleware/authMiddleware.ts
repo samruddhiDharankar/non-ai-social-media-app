@@ -10,6 +10,8 @@ export const protect = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    logger.warn(`Token in authMiddleware: ${req.cookies.token}`);
+    // logger.warn(`Req ${JSON.stringify(req)}`);
     const token = req.cookies.token;
 
     if (!token) {
