@@ -25,7 +25,7 @@ function DashboardRoute() {
                 method: "GET",
                 credentials: "include",
             });
-            const data = response.json();
+            const data = await response.json();
             console.log("dash data ", data);
             if (response.ok) {
                 const data = await response.json();
