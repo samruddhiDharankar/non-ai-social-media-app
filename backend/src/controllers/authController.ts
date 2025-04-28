@@ -38,6 +38,8 @@ export const loginUserByEmailAndPassword = async (
         maxAge: 1 * 1 * 60 * 60 * 1000, // 1hr
       });
 
+      logger.warn(`Token setting in cookie: ${token}`);
+
       res.status(200).json({
         message: "Logged in successfully",
         user: { _id: user._id, username: user.username },
