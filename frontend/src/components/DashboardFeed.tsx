@@ -25,8 +25,7 @@ function DashboardRoute() {
                 method: "GET",
                 credentials: "include",
             });
-            const data = await response.json();
-            console.log("dash data ", data);
+
             if (response.ok) {
                 const data = await response.json();
                 // setFeedData(prev => [...prev, ...data.posts]);
@@ -35,6 +34,7 @@ function DashboardRoute() {
                     const uniqueNewPosts = data.posts.filter((p: { _id: string; }) => !existingIds.has(p._id));
                     return [...prev, ...uniqueNewPosts];
                 });
+                console.log(pageNumber, data.totalPages)
                 setHasMore(pageNumber < data.totalPages);
             } else {
                 navigate("/");
@@ -46,20 +46,25 @@ function DashboardRoute() {
         }
     }
 
-    // ensure fetch happens on first load or when page changes
+    // fetch feed first time
+    useEffect(() => {
+        console.log("first");
+        fetchFeed(1);
+        if (!tierInfoSeen) {
+            setShowTierInfoModal(true);
+        }
+        isInitialLoad.current = false;
+    }, []);
+
+    // fetch feed when page changes (for infinite scrolling)
     useEffect(() => {
         if (isInitialLoad.current) {
-            fetchFeed(page);    // first load
-            isInitialLoad.current = false;  // prevent further first-time loads
+            console.log("not first")
 
-            if (!tierInfoSeen) {
-                setShowTierInfoModal(true);
-            }
-        } else {
             fetchFeed(page);    // fetch when page changes
         }
 
-    }, [page, tierInfoSeen]);
+    }, [page]);
 
     const closeTierInfoModal = () => {
         setShowTierInfoModal(false);
@@ -68,6 +73,7 @@ function DashboardRoute() {
 
     const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
         const target = entries[0];
+        console.log("target.isIntersecting", target)
         if (target.isIntersecting && hasMore) {
             setPage(prev => prev + 1);
         }
