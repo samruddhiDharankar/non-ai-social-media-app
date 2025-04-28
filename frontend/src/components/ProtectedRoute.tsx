@@ -1,4 +1,4 @@
-// components/ProtectedRoute.tsx
+'use client';
 import { JSX, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../utils/useAuthStore";

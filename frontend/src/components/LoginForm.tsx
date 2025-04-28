@@ -1,3 +1,4 @@
+'use client';
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';

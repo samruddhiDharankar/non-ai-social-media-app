@@ -1,3 +1,4 @@
+'use client';
 type TierAndPerksInfoProps = {
     isVisible: boolean;
     closeModal: () => void;

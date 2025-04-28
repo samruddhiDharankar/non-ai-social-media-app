@@ -1,4 +1,4 @@
-
+'use client';
 import UserPublicProfile from '../components/UserPublicProfile'
 
 function UserPublicProfilePage() {

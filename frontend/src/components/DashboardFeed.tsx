@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Post } from '../types/post';
 import { formatDateTime } from '../utils/dateFormatter';

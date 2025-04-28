@@ -1,3 +1,4 @@
+'use client';
 import CreatePostForm from '../components/CreatePostForm'
 
 function CreatePostPage() {

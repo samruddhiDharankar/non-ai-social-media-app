@@ -1,3 +1,4 @@
+'use client';
 import DashboardRoute from '../components/DashboardFeed'
 
 function DashboardPage() {

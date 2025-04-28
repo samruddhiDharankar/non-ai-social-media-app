@@ -1,3 +1,4 @@
+'use client';
 import { useNavigate } from "react-router-dom";
 import SignupForm from "../components/SignupForm"
 
