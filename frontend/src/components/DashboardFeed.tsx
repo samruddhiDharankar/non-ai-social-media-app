@@ -23,9 +23,6 @@ function DashboardRoute() {
         try {
             const response = await fetch(`${VITE_API_URL}/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 credentials: "include",
             });
             if (response.ok) {

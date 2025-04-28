@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.set("trust proxy", 1); // very important for Render + Cloudflare
 
 app.use(
   cors({
