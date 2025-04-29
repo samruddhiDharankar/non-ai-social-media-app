@@ -24,9 +24,6 @@ app.use(
   })
 ); // your frontend port
 
-// Handle preflight requests
-app.options("*", cors());
-
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
