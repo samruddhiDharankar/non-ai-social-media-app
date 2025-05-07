@@ -11,7 +11,7 @@ function SearchBar() {
     const [filteredItems, setFilteredItems] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
-    const handleSearch = (e) => {
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
         setIsSearching(true);
     }
