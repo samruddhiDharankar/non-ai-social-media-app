@@ -13,7 +13,7 @@ function SignupForm() {
 
     const [isSignupFailed, setIsSignupFailed] = useState(false);
     const [signupErrorMessage, setSignupErrorMessage] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
     const isFormValid = form.name.trim() && form.username.trim() && form.email.trim() && form.password.trim();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +35,7 @@ function SignupForm() {
             const data = await response.json();
 
             if (response.ok) {
+                setIsLoading(true);
                 navigate("/");  // navigates to login
             }
             else {
@@ -93,6 +94,9 @@ function SignupForm() {
                 >
                     Sign Up
                 </button>
+                {isLoading && (
+                    <p className="text-center text-sm text-pink-800">Signing up...</p>
+                )}
                 {isSignupFailed && (
                     <p className="text-center text-sm text-pink-800">{signupErrorMessage}</p>
                 )}
