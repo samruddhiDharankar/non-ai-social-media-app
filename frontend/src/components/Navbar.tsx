@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
+import SearchBar from './SearchBar';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 function Navbar() {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ function Navbar() {
             >
                 Dashboard
             </Link>
-
+            <SearchBar />
             {/* Mobile Hamburger Menu */}
             <div className="lg:hidden">
                 <button
@@ -56,7 +57,7 @@ function Navbar() {
                     to="/me"
                     className="text-sm px-3 py-2 hover:text-pink-600 transition"
                 >
-                    My Profile
+                    Profile
                 </Link>
                 <button
                     onClick={handleLogout}

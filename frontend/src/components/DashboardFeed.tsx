@@ -130,7 +130,7 @@ function DashboardRoute() {
             )}
             <div className="max-w-3xl mx-auto space-y-6">
 
-                <h1 className="text-3xl font-extrabold text-pink-600 text-center mb-6">📌 Dashboard Feed</h1>
+                {/* <h1 className="text-3xl font-extrabold text-pink-600 text-center mb-6">📌 Dashboard Feed</h1> */}
                 {feedData.length > 0 ? (
                     feedData.map((post) => (
                         <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">

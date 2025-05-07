@@ -98,7 +98,12 @@ function UserPublicProfile() {
                         headers: { "Content-Type": "application/json" },
                         credentials: "include",
                     });
-                    setDisableFollowButtons(false);
+                    if (username === useAuthStore.getState().user?.username) {
+                        setDisableFollowButtons(true);
+                    }
+                    else {
+                        setDisableFollowButtons(false);
+                    }
                 } else {
                     userResponse = await fetch(`${VITE_API_URL}/users/me`, {
                         method: "GET",
