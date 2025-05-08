@@ -35,8 +35,7 @@ function LoginForm() {
 
                 setUser({
                     userId: data.user._id,
-                    username: data.user.username,
-                    tier: data.tier,
+                    username: data.user.username
                 });
                 setIsLoading(true);
                 setTimeout(() => {

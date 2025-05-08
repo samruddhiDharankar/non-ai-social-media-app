@@ -8,6 +8,8 @@ export interface IUser extends Document {
   bio?: string;
   profilePictUrl?: string;
   tier: string;
+  tierNumber: number;
+  isTierChanged: number;
   averageAuthScore: number;
   badge: string;
   postCount: number;
@@ -24,6 +26,8 @@ const userSchema = new Schema<IUser>(
     bio: { type: String },
     profilePictUrl: { type: String },
     tier: { type: String, default: "Newbie" },
+    tierNumber: { type: Number, default: 0 },
+    isTierChanged: { type: Number, default: 0 },
     averageAuthScore: { type: Number, default: 0 },
     badge: { type: String, default: "🐣" },
     postCount: { type: Number, default: 0 },

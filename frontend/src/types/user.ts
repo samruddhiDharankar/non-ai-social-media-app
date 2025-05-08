@@ -5,6 +5,8 @@ export interface User {
   bio?: string;
   profilePictUrl?: string;
   tier: string;
+  tierNumber: number;
+  isTierChanged: number;
   averageAuthScore: number;
   badge: string;
   postCount: number;

@@ -25,8 +25,7 @@ function App() {
           const userData = await response.json();
           setUser({
             userId: userData._id,
-            username: userData.username,
-            tier: userData.tier
+            username: userData.username
           });
         }
       } catch (err) {

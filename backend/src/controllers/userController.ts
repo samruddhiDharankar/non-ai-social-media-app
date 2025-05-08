@@ -70,8 +70,15 @@ export const getMe = async (
       return;
     }
 
-    const avgScore = await getAverageAuthScore(req.user?.id);
-    const { tier, badge } = await getUserTier(avgScore);
+    const avgScore = await getAverageAuthScore(req.user.id);
+    const { tierNumber, tier, badge } = await getUserTier(avgScore);
+
+    let isTierChanged = 0;
+    if (tierNumber > req.user.tierNumber) {
+      isTierChanged = 1;
+    } else if (tierNumber < req.user.tierNumber) {
+      isTierChanged = -1;
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       { _id: req.user.id },
@@ -80,6 +87,8 @@ export const getMe = async (
           averageAuthScore: +avgScore.toFixed(2),
           tier: tier,
           badge: badge,
+          tierNumber: tierNumber,
+          isTierChanged: isTierChanged,
         },
       }
     );

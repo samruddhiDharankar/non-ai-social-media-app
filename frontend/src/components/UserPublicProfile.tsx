@@ -7,6 +7,7 @@ import { formatDateTime } from '../utils/dateFormatter';
 import { useAuthStore } from '../utils/useAuthStore';
 import { Follow } from '../types/follow';
 import TierAndPerksInfo from './TierAndPerksInfo';
+import TierChange from './TierChange';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
@@ -29,6 +30,7 @@ function UserPublicProfile() {
     const LIMIT = 10;
 
     const [showTierInfoModal, setShowTierInfoModal] = useState(false);
+    const [isTierChange, setIsTierChange] = useState(0);
 
     const closeTierInfoModal = () => {
         setShowTierInfoModal(false);
@@ -117,6 +119,9 @@ function UserPublicProfile() {
                 if (userResponse.ok) {
                     setUserData(userData);
                     setPage(1);
+                    if (userData.isTierChanged != 0) {
+                        setIsTierChange(userData.isTierChanged);
+                    }
 
                     try {
                         const response = await fetch(`${VITE_API_URL}/followers?userId=${userData?._id}`, {
@@ -200,6 +205,14 @@ function UserPublicProfile() {
 
     return (
         <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
+
+            {isTierChange !== 0 && (
+                <>
+                    <TierChange tierChangeValue={isTierChange} />
+                </>
+            )}
+
+            {/* User Detail Box */}
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
                 {/* Change this */}
