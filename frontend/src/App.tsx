@@ -26,6 +26,7 @@ function App() {
           setUser({
             userId: userData._id,
             username: userData.username,
+            tier: userData.tier
           });
         }
       } catch (err) {
