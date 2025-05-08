@@ -10,9 +10,9 @@ export const analyzeTextContent = async (text: string) => {
       },
       body: JSON.stringify({ inputs: text }),
     });
-
     if (!response.ok) {
-      logger.error("Failed to fetch AI detection results");
+      const errorText = await response.text(); // safer than json() in error cases
+      logger.error(`Failed to fetch AI detection results: ${errorText}`);
       return 0;
     }
 
