@@ -48,39 +48,40 @@ function SearchBar() {
     }, [])
 
     return (
-        <div className="relative w-64">
-            <input
-                placeholder="Search"
-                value={searchQuery}
-                onChange={handleSearch}
-                className="w-full border border-gray-300 rounded px-3 py-2"
-            />
+        <div className="w-90 px-4 sm:px-6 md:px-8">
+            <div className="relative mx-auto w-full max-w-sm">
+                <input
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full border border-pink-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                />
 
 
 
-            {isSearching && filteredItems.length > 0 && (
+                {isSearching && filteredItems.length > 0 && (
 
-                <ul className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg max-h-60 overflow-auto">
-                    {filteredItems.map((item, index) => (
-                        <li
-                            key={index}
-                            className="px-3 py-2 hover:bg-purple-50 cursor-pointer"
-                            onClick={() => {
-                                setSearchQuery("");
-                                setFilteredItems([]);
-                                setIsSearching(false);
-                            }}
-                        >
-                            <Link to={`/${item.username}`}>
-                                <p className="font-medium text-purple-500">{item.username}</p>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                    <ul className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg max-h-60 overflow-auto">
+                        {filteredItems.map((item, index) => (
+                            <li
+                                key={index}
+                                className="px-3 py-2 hover:bg-purple-50 cursor-pointer"
+                                onClick={() => {
+                                    setSearchQuery("");
+                                    setFilteredItems([]);
+                                    setIsSearching(false);
+                                }}
+                            >
+                                <Link to={`/${item.username}`}>
+                                    <p className="font-medium text-purple-500">{item.username}</p>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
 
-
+            </div>
         </div>
     )
 }

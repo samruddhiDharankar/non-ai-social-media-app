@@ -29,7 +29,7 @@ function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
                 className="text-xl font-bold text-pink-600 hover:text-pink-700 transition"
             >
-                Dashboard
+                Non
             </Link>
             <SearchBar />
             {/* Mobile Hamburger Menu */}
