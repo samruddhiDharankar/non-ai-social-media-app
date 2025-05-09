@@ -26,7 +26,7 @@ function SearchBar() {
             user.username.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredItems(filteredData);
-        console.log(filteredItems);
+
         setIsSearching(true);
 
     }, [fetchedData, searchQuery]);
@@ -39,7 +39,7 @@ function SearchBar() {
                 credentials: "include",
             });
             const data = await response.json();
-            console.log("fetched data ", data);
+
             if (response.ok) {
                 setFetchedData(data);
             }

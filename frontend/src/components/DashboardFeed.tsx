@@ -34,7 +34,7 @@ function DashboardRoute() {
                     const uniqueNewPosts = data.posts.filter((p: { _id: string; }) => !existingIds.has(p._id));
                     return [...prev, ...uniqueNewPosts];
                 });
-                console.log(pageNumber, data.totalPages)
+
                 setHasMore(pageNumber < data.totalPages);
             } else {
                 navigate("/");
@@ -48,7 +48,7 @@ function DashboardRoute() {
 
     // fetch feed first time
     useEffect(() => {
-        console.log("first");
+
         fetchFeed(1);
         if (!tierInfoSeen) {
             setShowTierInfoModal(true);
@@ -59,7 +59,6 @@ function DashboardRoute() {
     // fetch feed when page changes (for infinite scrolling)
     useEffect(() => {
         if (isInitialLoad.current) {
-            console.log("not first")
 
             fetchFeed(page);    // fetch when page changes
         }
@@ -73,7 +72,7 @@ function DashboardRoute() {
 
     const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
         const target = entries[0];
-        console.log("target.isIntersecting", target)
+
         if (target.isIntersecting && hasMore) {
             setPage(prev => prev + 1);
         }

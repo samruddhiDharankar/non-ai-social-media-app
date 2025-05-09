@@ -1,23 +1,44 @@
 'use client';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../utils/useAuthStore';
 import SearchBar from './SearchBar';
 import TierAndPerksInfo from './TierAndPerksInfo';
-
-export default function NavBar({ handleLogout }: { handleLogout: () => void }) {
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+function Navbar() {
+    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
 
+    const handleLogout = async () => {
+        try {
+            await fetch(`${VITE_API_URL}/auth/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
+            // const data = await response.json();
+            useAuthStore.getState().logout();
+            navigate("/");
+        } catch (err) {
+            console.log("error", err);
+        }
+    }
+
     return (
         <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-            {/* Logo */}
-            <Link
-                to="/dashboard"
-                onClick={() => setIsMenuOpen(false)}
-                className="text-xl font-bold text-pink-600 hover:text-pink-700 transition"
-            >
-                Non
-            </Link>
+            <div className='flex gap-3'>
+                {/* Logo */}
+                <Link
+                    to="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-xl font-bold text-pink-600 hover:text-pink-700 transition"
+                >
+                    Non
+                </Link>
+                <Link to="https://forms.gle/rf2cw7LCDtL1fX6i8" className='py-1 font-bold text-purple-700 cursor-pointer hover:text-pink-600'>
+                    Feedback
+                </Link>
+            </div>
 
             {/* Search */}
             <SearchBar />
@@ -103,3 +124,5 @@ export default function NavBar({ handleLogout }: { handleLogout: () => void }) {
         </nav>
     );
 }
+
+export default Navbar;

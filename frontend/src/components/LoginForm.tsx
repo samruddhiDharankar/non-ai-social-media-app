@@ -29,7 +29,7 @@ function LoginForm() {
                 body: JSON.stringify({ ...form, email: form.email.trim() }),
             });
             const data = await response.json();
-            console.log(data);
+
             if (response.ok) {
                 console.log("Logged in");
 

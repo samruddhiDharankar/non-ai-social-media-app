@@ -131,6 +131,7 @@ function UserPublicProfile() {
                         });
                         if (response.ok) {
                             const data = await response.json();
+
                             setIsFollowing(data.some((item: any) => item.follower._id === useAuthStore.getState().user?.userId));
                             setFollowers(data);
                         }
