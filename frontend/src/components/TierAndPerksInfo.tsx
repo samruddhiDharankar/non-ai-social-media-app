@@ -9,12 +9,12 @@ function TierAndPerksInfo({ isVisible, closeModal }: TierAndPerksInfoProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-80 backdrop-blur-sm p-4">
             <div className="bg-gradient-to-br from-indigo-500 via-pink-500 to-yellow-500 p-6 md:p-8 rounded-3xl text-center shadow-2xl transform md:scale-105 w-full max-w-md">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 text-shadow-xl">🎉 Unlock Your Authenticity Rank!</h2>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 text-shadow-xl">Unlock Your Authenticity Rank!</h2>
                 <p className="text-base md:text-lg text-white mb-4 opacity-90">
                     We’re here to reward those who keep it real! Your content's authenticity will shape your rank - move up the ladder by sharing genuine, creative, and original posts.
                 </p>
                 <p className="text-base md:text-lg text-white mb-6 opacity-80">
-                    Your ranking will grow as you engage with the community. The more authentic you are, the more you level up, unlocking exclusive badges and perks.
+                    {/* Your ranking will grow as you engage with the community. The more authentic you are, the more you level up, unlocking exclusive badges and perks. */}
                 </p>
 
                 <div className="space-y-3 mt-4 px-4 py-3 bg-white bg-opacity-20 rounded-lg">
