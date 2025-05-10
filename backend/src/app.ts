@@ -19,7 +19,10 @@ app.set("trust proxy", 1); // very important for Render + Cloudflare
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL as string,
+    origin: [
+      process.env.FRONTEND_URL as string,
+      "https://d24e96f6rg39hb.cloudfront.net",
+    ],
     credentials: true,
   })
 ); // your frontend port
