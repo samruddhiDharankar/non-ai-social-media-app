@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: [
       process.env.FRONTEND_URL as string,
-      "https://d24e96f6rg39hb.cloudfront.net",
+      "https://d2kbrhdbf08phq.cloudfront.net",
     ],
     credentials: true,
   })
