@@ -73,7 +73,14 @@ function GoogleLoginButton() {
         }
     };
 
-    return <div id="google-signin-btn" className="w-full py-2 rounded-md"></div>;
+    return (
+        <div className="flex justify-center w-full">
+            <div
+                id="google-signin-btn"
+                className="w-full max-w-xs sm:max-w-sm md:max-w-md"
+            />
+        </div>
+    );
 }
 
 export default GoogleLoginButton;
