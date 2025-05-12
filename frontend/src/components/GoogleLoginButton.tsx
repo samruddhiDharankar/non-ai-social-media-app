@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useAuthStore } from "../utils/useAuthStore";
 import { useNavigate } from "react-router-dom";
 const VITE_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function GoogleLoginButton() {
     const setUser = useAuthStore((state) => state.setUser);
@@ -30,9 +31,9 @@ function GoogleLoginButton() {
         else (window as any).google.accounts.id.prompt();
     }, []);
 
-    const handleGoogleLogin = async (response) => {
+    const handleGoogleLogin = async (response: { credential: string; }) => {
         console.log(response);
-        const res = await fetch("http://localhost:3000/api/auth/google-login", {
+        const res = await fetch(`${VITE_API_URL}/auth/google-login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id_token: response.credential }),
