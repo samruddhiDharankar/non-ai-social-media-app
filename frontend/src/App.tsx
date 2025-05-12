@@ -12,13 +12,17 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const setUser = useAuthStore((state) => state.setUser);
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await fetch(`${VITE_API_URL}/users/me`, {
           method: "GET",
-          credentials: "include",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+          // credentials: "include",
         });
         if (response.ok) {
 

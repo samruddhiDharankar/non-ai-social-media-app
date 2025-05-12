@@ -18,12 +18,16 @@ function DashboardRoute() {
     const isInitialLoad = useRef(true);
     const [showTierInfoModal, setShowTierInfoModal] = useState(false);
     const { tierInfoSeen, setTierInfoSeen } = useAuthStore();
+    const token = localStorage.getItem("accessToken");
 
     const fetchFeed = async (pageNumber: number) => {
         try {
             const response = await fetch(`${VITE_API_URL}/posts/feed?page=${pageNumber}&limit=${LIMIT}`, {
                 method: "GET",
-                credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+                // credentials: "include",
             });
 
             if (response.ok) {
@@ -97,8 +101,11 @@ function DashboardRoute() {
         try {
             const response = await fetch(`${VITE_API_URL}/comments/`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`,
+                },
+                // credentials: 'include',
                 body: JSON.stringify({ postId, content: comment }),
             });
             const data = await response.json();

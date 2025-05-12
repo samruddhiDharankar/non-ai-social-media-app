@@ -2,6 +2,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
+import GoogleLoginButton from './GoogleLoginButton';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 function LoginForm() {
     const navigate = useNavigate();
@@ -25,11 +26,12 @@ function LoginForm() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                credentials: "include", // required to include cookies
+                // credentials: "include", // required to include cookies
                 body: JSON.stringify({ ...form, email: form.email.trim() }),
             });
             const data = await response.json();
-
+            localStorage.setItem("accessToken", data.user.token);
+            localStorage.setItem("refreshToken", data.user.refreshToken);
             if (response.ok) {
                 console.log("Logged in");
 
@@ -55,7 +57,7 @@ function LoginForm() {
 
 
     return (
-        <>
+        <div className='flex flex-col gap-2'>
             <form className='space-y-4' onSubmit={handleSubmit} >
                 <input
                     name="email"
@@ -91,7 +93,9 @@ function LoginForm() {
                     <p className="text-center text-sm text-pink-800">Email or password doesn't match</p>
                 )}
             </form>
-        </>
+
+            <GoogleLoginButton />
+        </div>
     )
 }
 

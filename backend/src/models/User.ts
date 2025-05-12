@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IUser extends Document {
   name: string;
   email: string;
-  hashedPassword: string;
+  hashedPassword?: string;
   username: string;
   bio?: string;
   profilePictUrl?: string;
@@ -15,13 +15,14 @@ export interface IUser extends Document {
   postCount: number;
   streakCount: number;
   lastLogin?: Date;
+  authType?: string;
 }
 
 const userSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    hashedPassword: { type: String, required: true },
+    hashedPassword: { type: String },
     username: { type: String, required: true, unique: true },
     bio: { type: String },
     profilePictUrl: { type: String },
@@ -33,6 +34,7 @@ const userSchema = new Schema<IUser>(
     postCount: { type: Number, default: 0 },
     streakCount: { type: Number, default: 0 },
     lastLogin: { type: Date, default: null },
+    authType: { type: String, default: "default" },
   },
   { timestamps: true }
 );
