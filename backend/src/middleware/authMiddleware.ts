@@ -12,7 +12,9 @@ export const protect = async (
   try {
     // logger.warn(`Token in authMiddleware: ${req.cookies.token}`);
     // logger.warn(`Req ${JSON.stringify(req)}`);
-    const token = req.cookies.token;
+    // const token = req.cookies.token;
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
       res.status(401).json({ message: "No token provided" });

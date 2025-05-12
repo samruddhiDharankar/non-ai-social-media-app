@@ -32,6 +32,8 @@ function UserPublicProfile() {
     const [showTierInfoModal, setShowTierInfoModal] = useState(false);
     const [isTierChange, setIsTierChange] = useState(0);
 
+    const token = localStorage.getItem("accessToken");
+
     const closeTierInfoModal = () => {
         setShowTierInfoModal(false);
     }
@@ -41,8 +43,12 @@ function UserPublicProfile() {
             if (userData) {
                 const postResponse = await fetch(`${VITE_API_URL}/posts/user/${userData._id}?page=${pageNumber}&limit=${LIMIT}`, {
                     method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+
+                    },
+                    // credentials: "include",
                 });
 
                 if (postResponse.ok) {
@@ -97,8 +103,11 @@ function UserPublicProfile() {
                 if (username) {
                     userResponse = await fetch(`${VITE_API_URL}/users/username/${username}`, {
                         method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        // credentials: "include",
                     });
                     if (username === useAuthStore.getState().user?.username) {
                         setDisableFollowButtons(true);
@@ -109,8 +118,11 @@ function UserPublicProfile() {
                 } else {
                     userResponse = await fetch(`${VITE_API_URL}/users/me`, {
                         method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        // credentials: "include",
                     });
                     setDisableFollowButtons(true);
                 }
@@ -126,8 +138,11 @@ function UserPublicProfile() {
                     try {
                         const response = await fetch(`${VITE_API_URL}/followers?userId=${userData?._id}`, {
                             method: "GET",
-                            headers: { "Content-Type": "application/json" },
-                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            // credentials: "include",
                         });
                         if (response.ok) {
                             const data = await response.json();
@@ -156,8 +171,11 @@ function UserPublicProfile() {
         try {
             await fetch(`${VITE_API_URL}/follow`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                // credentials: "include",
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
             // const data = await response.json();
@@ -174,8 +192,9 @@ function UserPublicProfile() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-                credentials: "include",
+                // credentials: "include",
                 body: JSON.stringify({ targetUserId: userData?._id })
             });
             // const data = await response.json();
@@ -193,8 +212,11 @@ function UserPublicProfile() {
         try {
             const response = await fetch(`${VITE_API_URL}/following?userId=${userData?._id}`, {
                 method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                // credentials: "include",
             });
             const data = await response.json();
             setFollowing(data);

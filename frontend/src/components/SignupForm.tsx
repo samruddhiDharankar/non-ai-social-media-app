@@ -29,7 +29,7 @@ function SignupForm() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                credentials: "include", // required to include cookies
+                // credentials: "include", // required to include cookies
                 body: JSON.stringify(form),
             });
             const data = await response.json();

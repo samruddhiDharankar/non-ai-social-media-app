@@ -36,12 +36,12 @@ function GoogleLoginButton() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id_token: response.credential }),
-            credentials: "include",
+            // credentials: "include",
         });
         const data = await res.json();
         console.log(data);
-        localStorage.setItem("accessToken", data.token);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("accessToken", data.user.token);
+        localStorage.setItem("refreshToken", data.user.refreshToken);
         if (res.ok) {
             console.log("Logged in");
 

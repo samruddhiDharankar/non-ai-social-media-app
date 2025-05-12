@@ -10,6 +10,7 @@ function SearchBar() {
     const [fetchedData, setFetchedData] = useState<User[]>([]);
     const [filteredItems, setFilteredItems] = useState<User[]>([]);
     const [isSearching, setIsSearching] = useState(false);
+    const token = localStorage.getItem("accessToken");
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -36,7 +37,10 @@ function SearchBar() {
         const fetchUsers = async () => {
             const response = await fetch(`${VITE_API_URL}/users/`, {
                 method: "GET",
-                credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+                // credentials: "include",
             });
             const data = await response.json();
 

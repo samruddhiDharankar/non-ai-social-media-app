@@ -6,6 +6,7 @@ function CreatePostForm() {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const token = localStorage.getItem("accessToken");
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,9 +19,10 @@ function CreatePostForm() {
             const response = await fetch(`${VITE_API_URL}/posts/`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-                credentials: "include", // required to include cookies
+                // credentials: "include", // required to include cookies
                 body: JSON.stringify(form),
             });
             // const data = await response.json();

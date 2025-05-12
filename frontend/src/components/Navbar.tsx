@@ -9,12 +9,16 @@ function Navbar() {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
+    const token = localStorage.getItem("accessToken");
 
     const handleLogout = async () => {
         try {
             await fetch(`${VITE_API_URL}/auth/logout`, {
                 method: "POST",
-                credentials: "include",
+                // credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             });
             // const data = await response.json();
             useAuthStore.getState().logout();

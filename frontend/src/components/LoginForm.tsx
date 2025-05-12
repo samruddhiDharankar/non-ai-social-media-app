@@ -26,11 +26,12 @@ function LoginForm() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                credentials: "include", // required to include cookies
+                // credentials: "include", // required to include cookies
                 body: JSON.stringify({ ...form, email: form.email.trim() }),
             });
             const data = await response.json();
-
+            localStorage.setItem("accessToken", data.user.token);
+            localStorage.setItem("refreshToken", data.user.refreshToken);
             if (response.ok) {
                 console.log("Logged in");
 

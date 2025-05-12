@@ -33,18 +33,18 @@ export const loginUserByEmailAndPassword = async (
         expiresIn: "1h",
       });
 
-      res.cookie("token", token, {
-        httpOnly: true, // Prevents client-side JS access
-        secure: true, // set to true in production with https
-        sameSite: "none", // Helps mitigate CSRF attacks
-        maxAge: 1 * 1 * 60 * 60 * 1000, // 1hr
-      });
+      // res.cookie("token", token, {
+      //   httpOnly: true, // Prevents client-side JS access
+      //   secure: true, // set to true in production with https
+      //   sameSite: "none", // Helps mitigate CSRF attacks
+      //   maxAge: 1 * 1 * 60 * 60 * 1000, // 1hr
+      // });
 
-      logger.warn(`Token setting in cookie: ${token}`);
+      logger.warn(`Token setting: ${token}`);
 
       res.status(200).json({
         message: "Logged in successfully",
-        user: { _id: user._id, username: user.username },
+        user: { _id: user._id, username: user.username, token: token },
       });
       return;
     } else {
@@ -149,16 +149,16 @@ export const loginByGoogle = async (req: Request, res: Response) => {
     });
 
     // Send token in cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // make sure you're using HTTPS in prod
-      sameSite: "none",
-      maxAge: 60 * 60 * 1000, // 1 hour
-    });
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true, // make sure you're using HTTPS in prod
+    //   sameSite: "none",
+    //   maxAge: 60 * 60 * 1000, // 1 hour
+    // });
 
     res.status(200).json({
       message: "Google Logged in successfully",
-      user: { _id: user._id, username: user.username },
+      user: { _id: user._id, username: user.username, token: token },
     });
     return;
   } catch (error) {
