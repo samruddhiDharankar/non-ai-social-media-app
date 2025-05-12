@@ -78,6 +78,7 @@ function GoogleLoginButton() {
             <div
                 id="google-signin-btn"
                 className="w-full max-w-xs sm:max-w-sm md:max-w-md"
+                style={{ minWidth: "250px" }}
             />
         </div>
     );

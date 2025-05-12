@@ -86,7 +86,9 @@ function LoginForm() {
                 >
                     Log In
                 </button>
-                <GoogleLoginButton />
+                <div className="w-full">
+                    <GoogleLoginButton />
+                </div>
                 {isLoading && (
                     <p className="text-center text-sm text-pink-800">Logging in...</p>
                 )}
