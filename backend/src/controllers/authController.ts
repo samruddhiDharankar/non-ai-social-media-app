@@ -4,7 +4,6 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import logger from "../logger";
 import { OAuth2Client } from "google-auth-library";
-import { textFieldClasses } from "@mui/material";
 
 export const loginUserByEmailAndPassword = async (
   req: Request,
