@@ -22,8 +22,8 @@ function GoogleLoginButton() {
 
             if (buttonContainer && buttonContainer.childNodes.length === 0) {
                 (window as any).google.accounts.id.renderButton(buttonContainer, {
-                    theme: "outline",
-                    size: "large",
+                    // theme: "outline",
+                    // size: "large",
                 });
             }
 
