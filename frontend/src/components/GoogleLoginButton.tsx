@@ -72,7 +72,7 @@ function GoogleLoginButton() {
         }
     };
 
-    return <div id="google-signin-btn"></div>;
+    return <div id="google-signin-btn" className="w-full py-2 rounded-md"></div>;
 }
 
 export default GoogleLoginButton;

@@ -58,7 +58,7 @@ function LoginForm() {
 
     return (
         <div className='flex flex-col gap-2'>
-            <form className='space-y-4' onSubmit={handleSubmit} >
+            <form className='space-y-3' onSubmit={handleSubmit} >
                 <input
                     name="email"
                     placeholder='Email'
