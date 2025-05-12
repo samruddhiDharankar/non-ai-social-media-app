@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import logger from "../logger";
+import { OAuth2Client } from "google-auth-library";
+import { textFieldClasses } from "@mui/material";
 
 export const loginUserByEmailAndPassword = async (
   req: Request,
@@ -21,7 +23,7 @@ export const loginUserByEmailAndPassword = async (
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
-      user.hashedPassword
+      user.hashedPassword || ""
     );
     if (isPasswordCorrect) {
       user.lastLogin = new Date();
@@ -93,6 +95,75 @@ export const signupUser = async (req: Request, res: Response) => {
     logger.error(
       `Signup error for email: ${req.body.email}, Error: ${err.message}`
     );
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const loginByGoogle = async (req: Request, res: Response) => {
+  try {
+    const client = new OAuth2Client(
+      "889144470561-qho5nku0rhv4hlup6n1r3nh851e58aql.apps.googleusercontent.com"
+    );
+    const { id_token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: id_token,
+      audience:
+        "889144470561-qho5nku0rhv4hlup6n1r3nh851e58aql.apps.googleusercontent.com",
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload?.email) {
+      res.status(400).json({ message: "Google payload missing email" });
+      return;
+    }
+
+    const normalizedEmail = payload.email.toLowerCase().trim();
+    // Check if user exists
+    let user = await User.findOne({ email: normalizedEmail });
+
+    // Create user if doesn't exist
+    if (!user) {
+      user = await User.create({
+        username: payload.email.split("@")[0], // you can improve this logic, generate randomly
+        name: payload.name,
+        email: normalizedEmail,
+        // picture: payload.picture,
+        authType: "google",
+        lastLogin: new Date(),
+      });
+    } else {
+      await User.findByIdAndUpdate(
+        { _id: user._id },
+        {
+          $set: {
+            lastLogin: new Date(),
+          },
+        }
+      );
+    }
+
+    // Generate your own JWT
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
+
+    // Send token in cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // make sure you're using HTTPS in prod
+      sameSite: "none",
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    res.status(200).json({
+      message: "Google Logged in successfully",
+      user: { _id: user._id, username: user.username },
+    });
+    return;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
     res.status(500).json({ message: "Internal server error" });
   }
 };
