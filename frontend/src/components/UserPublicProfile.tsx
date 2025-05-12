@@ -239,7 +239,7 @@ function UserPublicProfile() {
             <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
 
                 {/* Change this */}
-                <h1 className="text-3xl font-extrabold text-pink-600 mb-7 text-center">{userData?.username}</h1>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-pink-600 mb-7 text-center break-words px-4">{userData?.username}</h1>
 
                 <div className="space-y-2 text- text-gray-800">
                     <p><span className="font-bold text-purple-600">Name:</span> {userData?.name}</p>

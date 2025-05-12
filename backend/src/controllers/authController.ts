@@ -4,6 +4,7 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import logger from "../logger";
 import { OAuth2Client } from "google-auth-library";
+import { getRandomUsername } from "../services/usernameGeneratorService";
 
 export const loginUserByEmailAndPassword = async (
   req: Request,
@@ -62,24 +63,25 @@ export const loginUserByEmailAndPassword = async (
 
 export const signupUser = async (req: Request, res: Response) => {
   try {
-    const { username, name, email, password } = req.body;
+    const { name, email, password } = req.body;
     const normalizedEmail = email.toLowerCase().trim();
     const userByEmail = await User.findOne({ email: normalizedEmail });
-    const userByUsername = await User.findOne({ username: username });
+    // const userByUsername = await User.findOne({ username: username });
     if (userByEmail) {
       res.status(409).json({ message: "Email is already used" });
       logger.warn(`Email is already used: ${email}`);
       return;
     }
-    if (userByUsername) {
-      res.status(409).json({ message: "Username is already used" });
-      logger.warn(`Username is already used: ${username}`);
-      return;
-    }
+    // if (userByUsername) {
+    //   res.status(409).json({ message: "Username is already used" });
+    //   logger.warn(`Username is already used: ${username}`);
+    //   return;
+    // }
     const hashedPassword = await bcrypt.hash(
       password,
       Number(process.env.BCRYPT_SALT_ROUNDS)
     );
+    const username = await getRandomUsername();
     await User.create({
       username: username,
       name: name,
@@ -120,8 +122,9 @@ export const loginByGoogle = async (req: Request, res: Response) => {
 
     // Create user if doesn't exist
     if (!user) {
+      const username = await getRandomUsername();
       user = await User.create({
-        username: payload.email.split("@")[0], // you can improve this logic, generate randomly
+        username: username, // generate randomly
         name: payload.name,
         email: normalizedEmail,
         // picture: payload.picture,

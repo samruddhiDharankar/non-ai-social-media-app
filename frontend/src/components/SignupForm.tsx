@@ -6,7 +6,7 @@ function SignupForm() {
     const navigate = useNavigate();
     const [form, setForm] = useState({
         name: "",
-        username: "",
+        // username: "",
         email: "",
         password: "",
     });
@@ -14,7 +14,7 @@ function SignupForm() {
     const [isSignupFailed, setIsSignupFailed] = useState(false);
     const [signupErrorMessage, setSignupErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const isFormValid = form.name.trim() && form.username.trim() && form.email.trim() && form.password.trim();
+    const isFormValid = form.name.trim() && form.email.trim() && form.password.trim();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -59,14 +59,14 @@ function SignupForm() {
                     required
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
-                <input
+                {/* <input
                     name="username"
                     placeholder='Username'
                     value={form.username}
                     onChange={handleChange}
                     required
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"
-                />
+                /> */}
                 <input
                     name="email"
                     placeholder='Email'
