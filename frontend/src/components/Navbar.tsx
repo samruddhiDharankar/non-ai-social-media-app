@@ -22,6 +22,7 @@ function Navbar() {
             });
             // const data = await response.json();
             useAuthStore.getState().logout();
+            localStorage.clear();
             navigate("/");
         } catch (err) {
             console.log("error", err);
