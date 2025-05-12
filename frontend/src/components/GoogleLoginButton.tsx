@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useAuthStore } from "../utils/useAuthStore";
 import { useNavigate } from "react-router-dom";
-const GOOGLE_CLIENT_ID = import.meta.env.GOOGLE_CLIENT_ID;
+const VITE_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function GoogleLoginButton() {
     const setUser = useAuthStore((state) => state.setUser);
@@ -16,7 +16,7 @@ function GoogleLoginButton() {
 
             script.onload = () => {
                 (window as any).google.accounts.id.initialize({
-                    client_id: "889144470561-qho5nku0rhv4hlup6n1r3nh851e58aql.apps.googleusercontent.com",
+                    client_id: VITE_GOOGLE_CLIENT_ID as string,
                     callback: handleGoogleLogin,
                 });
                 (window as any).google.accounts.id.renderButton(

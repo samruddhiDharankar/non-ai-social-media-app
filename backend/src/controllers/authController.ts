@@ -101,14 +101,11 @@ export const signupUser = async (req: Request, res: Response) => {
 
 export const loginByGoogle = async (req: Request, res: Response) => {
   try {
-    const client = new OAuth2Client(
-      "889144470561-qho5nku0rhv4hlup6n1r3nh851e58aql.apps.googleusercontent.com"
-    );
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID as string);
     const { id_token } = req.body;
     const ticket = await client.verifyIdToken({
       idToken: id_token,
-      audience:
-        "889144470561-qho5nku0rhv4hlup6n1r3nh851e58aql.apps.googleusercontent.com",
+      audience: process.env.GOOGLE_CLIENT_ID as string,
     });
 
     const payload = ticket.getPayload();
