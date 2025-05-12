@@ -86,6 +86,7 @@ function LoginForm() {
                 >
                     Log In
                 </button>
+                <GoogleLoginButton />
                 {isLoading && (
                     <p className="text-center text-sm text-pink-800">Logging in...</p>
                 )}
@@ -94,7 +95,6 @@ function LoginForm() {
                 )}
             </form>
 
-            <GoogleLoginButton />
         </div>
     )
 }
