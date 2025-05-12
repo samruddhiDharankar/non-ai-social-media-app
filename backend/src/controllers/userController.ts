@@ -11,7 +11,7 @@ export const getUsers = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const users = await User.find({}, { username: 1, _id: 0 });
+    const users = await User.find({}, { username: 1, name: 1, _id: 0 });
     res.json(users);
   } catch (error) {
     const err = error instanceof Error ? error : new Error("Unknown error");

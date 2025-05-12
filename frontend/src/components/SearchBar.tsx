@@ -23,9 +23,13 @@ function SearchBar() {
             setIsSearching(false);
             return;
         }
-        const filteredData = fetchedData.filter(user =>
-            user.username.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+        const filteredData = fetchedData.filter(user => {
+            const query = searchQuery.toLowerCase();
+            return (
+                user.username.toLowerCase().includes(query) ||
+                user.name?.toLowerCase().includes(query)
+            );
+        });
         setFilteredItems(filteredData);
 
         setIsSearching(true);
@@ -69,15 +73,16 @@ function SearchBar() {
                         {filteredItems.map((item, index) => (
                             <li
                                 key={index}
-                                className="px-3 py-2 hover:bg-purple-50 cursor-pointer"
+                                // className="px-3 py-2 hover:bg-purple-50 cursor-pointer"
                                 onClick={() => {
                                     setSearchQuery("");
                                     setFilteredItems([]);
                                     setIsSearching(false);
                                 }}
                             >
-                                <Link to={`/${item.username}`}>
-                                    <p className="font-medium text-purple-500">{item.username}</p>
+                                <Link to={`/${item.username}`} className="flex flex-col px-4 py-3 hover:bg-gray-50 transition-all duration-150">
+                                    <span className="text-sm font-semibold text-purple-600 truncate">{item.name}</span>
+                                    <span className="text-xs text-gray-500 truncate">{item.username}</span>
                                 </Link>
                             </li>
                         ))}
