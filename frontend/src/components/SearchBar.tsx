@@ -69,7 +69,7 @@ function SearchBar() {
 
                 {isSearching && filteredItems.length > 0 && (
 
-                    <ul className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg max-h-60 overflow-auto">
+                    <ul className="absolute z-10 mt-1 w-full navbar-background rounded shadow-lg max-h-60 overflow-auto">
                         {filteredItems.map((item, index) => (
                             <li
                                 key={index}
@@ -81,8 +81,8 @@ function SearchBar() {
                                 }}
                             >
                                 <Link to={`/${item.username}`} className="flex flex-col px-4 py-3 hover:bg-gray-50 transition-all duration-150">
-                                    <span className="text-sm font-semibold text-purple-600 truncate">{item.name}</span>
-                                    <span className="text-xs text-gray-500 truncate">{item.username}</span>
+                                    <span className="primary-text text-sm font-semibold truncate">{item.name}</span>
+                                    <span className="secondary-text text-xs truncate">{item.username}</span>
                                 </Link>
                             </li>
                         ))}

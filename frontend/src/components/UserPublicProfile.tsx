@@ -227,7 +227,7 @@ function UserPublicProfile() {
     }
 
     return (
-        <div className="bg-gradient-to-br from-yellow-100 to-pink-100 min-h-screen p-6 font-sans">
+        <div className="min-h-screen p-6 font-sans">
 
             {isTierChange !== 0 && (
                 <>
@@ -236,20 +236,20 @@ function UserPublicProfile() {
             )}
 
             {/* User Detail Box */}
-            <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-4 border-2 border-pink-300">
+            <div className="post-card max-w-3xl mx-auto shadow-xl rounded-3xl p-6 space-y-4">
 
                 {/* Change this */}
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-pink-600 mb-7 text-center break-words px-4">{userData?.username}</h1>
+                <h1 className="primary-text text-xl sm:text-2xl md:text-3xl font-extrabold mb-7 text-center break-words px-4">{userData?.username}</h1>
 
-                <div className="space-y-2 text- text-gray-800">
-                    <p><span className="font-bold text-purple-600">Name:</span> {userData?.name}</p>
-                    <p><span className="font-bold text-purple-600">Badge:</span> {userData?.badge}</p>
-                    <p><span className="font-bold text-purple-600">Posts:</span> {userData?.postCount}</p>
-                    <p><span className="font-bold text-purple-600">Streak:</span> {userData?.streakCount}</p>
+                <div className="space-y-2">
+                    <p><span className="primary-text font-bold">Name:</span><span className='secondary-text'> {userData?.name}</span></p>
+                    <p><span className="primary-text font-bold">Badge:</span><span className='secondary-text'> {userData?.badge}</span></p>
+                    <p><span className="primary-text font-bold">Posts:</span><span className='secondary-text'> {userData?.postCount}</span></p>
+                    <p><span className="primary-text font-bold">Streak:</span><span className='secondary-text'> {userData?.streakCount}</span></p>
                     <p>
-                        <span className="font-bold text-purple-600">Tier:</span> {userData?.tier}
+                        <span className="primary-text font-bold">Tier:</span><span className='secondary-text'> {userData?.tier}</span>
                         <button onClick={() => setShowTierInfoModal(true)}
-                            className='text-pink-500 hover:text-pink-700'
+                            className='cursor-pointer'
                             title='View Tier Info'
                         >ℹ️</button>
                     </p>
@@ -262,12 +262,12 @@ function UserPublicProfile() {
                     {!disableFollowButtons && (
                         <>
                             {isFollowing ? (
-                                <button onClick={handleUnfollow} className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                <button onClick={handleUnfollow} className="send-button py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                                     Unfollow
                                 </button>
                             ) : (
                                 <button onClick={handleFollow}
-                                    className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                                    className="send-button py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                                     Follow
                                 </button>
                             )}
@@ -275,11 +275,11 @@ function UserPublicProfile() {
                     )}
 
                     <button onClick={handleFetchFollowersButton}
-                        className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        className="secondary-button py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Followers
                     </button>
                     <button onClick={fetchFollowing}
-                        className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
+                        className="secondary-button py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out">
                         View Following
                     </button>
 
@@ -340,13 +340,13 @@ function UserPublicProfile() {
                         >
                             ✖
                         </button>
-                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">Following</h3>
+                        <h3 className="text-2xl font-bold text-center primary-text mb-4">Following</h3>
 
                         <div className="max-h-[300px] overflow-y-auto space-y-3">
                             {following.length > 0 ? (
                                 following.map((f) => (
                                     <Link key={f._id} to={`/${f.following.username}`} onClick={() => setShowFollowingModal(false)}>
-                                        <div className="p-4 mb-2 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow cursor-pointer ">
+                                        <div className="p-4 mb-2 gradient-background rounded-xl shadow cursor-pointer ">
                                             <p className="font-bold text-gray-800">{f.following.name}</p>
                                             <p className="text-sm text-gray-500">@{f.following.username}</p>
                                         </div>
@@ -362,41 +362,41 @@ function UserPublicProfile() {
 
             {/* Posts */}
             <div className="max-w-3xl mx-auto mt-10 space-y-6">
-                <h2 className="text-2xl font-bold text-center text-purple-600">📝 Posts</h2>
+                <h2 className="primary-text text-2xl font-bold text-center">Posts</h2>
 
                 {userPostData && userPostData.length > 0 ? (
                     userPostData.map((post) => (
-                        <div key={post._id} className="bg-white p-5 rounded-2xl shadow-lg border-l-4 border-pink-300">
-                            <p className="text-gray-700 text-lg">{post?.text}</p>
-                            <p className="text-sm text-purple-500 mt-1">{post?.aiDetectionSummary}</p>
-                            <p className="text-xs text-gray-400">{formatDateTime(post?.createdAt)}</p>
+                        <div key={post._id} className="post-card p-5 rounded-2xl shadow-lg">
+                            <p className="secondary-text text-lg">{post?.text}</p>
+                            <p className="primary-text text-sm mt-1">{post?.aiDetectionSummary}</p>
+                            <p className="tertiary-text text-xs">{formatDateTime(post?.createdAt)}</p>
 
                             <div className="mt-3">
-                                <h4 className="text-md font-semibold text-gray-700">💬 Comments</h4>
+                                <h4 className="secondary-text text-md font-semibold">💬 Comments</h4>
                                 <div className="space-y-2 mt-2">
                                     {post.comments?.length ? (
                                         post.comments.map((comment) => (
-                                            <div key={comment._id} className="bg-gray-100 p-3 rounded-lg shadow-sm">
+                                            <div key={comment._id} className="comment-card p-3 rounded-lg shadow-sm">
                                                 <Link to={`/${comment.user.username}`}>
-                                                    <p className="font-medium text-purple-700">@{comment.user?.username}</p>
+                                                    <p className="primary-text font-medium">@{comment.user?.username}</p>
                                                 </Link>
-                                                <p className="text-sm text-gray-600">{comment.content}</p>
-                                                <p className="text-xs text-gray-500">{formatDateTime(comment.createdAt)}</p>
+                                                <p className="secondary-text text-sm">{comment.content}</p>
+                                                <p className="tertiary-text text-xs">{formatDateTime(comment.createdAt)}</p>
                                             </div>
                                         ))
                                     ) : (
-                                        <p className="text-gray-400 text-sm">No comments yet 💭</p>
+                                        <p className="tertiary-text text-sm">No comments yet 💭</p>
                                     )}
                                 </div>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-sm text-gray-500 mt-4">No posts yet. Time to write something magical! ✨</p>
+                    <p className="tertiary-text text-center text-sm mt-4">No posts yet. Time to write something magical! ✨</p>
                 )}
 
                 {/* Infinite scroll loader */}
-                <div ref={loaderRef} className="text-center text-pink-500 mt-6">
+                <div ref={loaderRef} className="secondary-text text-center mt-6">
                     {hasMore ? "Loading more..." : "No more posts"}
                 </div>
             </div>

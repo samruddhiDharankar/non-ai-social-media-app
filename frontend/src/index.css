@@ -1,1 +1,182 @@
 @import "tailwindcss";
+
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
+:root {
+  --color-primary: #ad7ffd;
+  --color-secondary: rgb(119, 117, 117);
+  --color-ternary: rgb(191, 191, 191);
+  --color-background: #ffffff;
+  --color-button: #ff4fa7;
+
+  --dark-color-primary: #cbbeff;
+  --dark-color-secondary: rgb(184, 184, 184);
+  --dark-color-ternary: rgb(125, 125, 125);
+  --dark-background: #121212;
+  --dark-color-button: #ff9ccf;
+}
+
+body {
+  background: linear-gradient(to bottom right, #fef08a, #fbcfe8);
+}
+.dark body {
+  background: linear-gradient(to bottom right, #161618, #1e1e20);
+  color: gray;
+}
+
+.gradient-background {
+  background: linear-gradient(to bottom right, #fef08a, #fbcfe8);
+}
+
+.dark .gradient-background {
+  background-color: linear-gradient(to bottom right, #1e1e20, #1e1e20);
+}
+
+.navbar-background {
+  background-color: white;
+}
+
+.dark .navbar-background {
+  background-color: #1e1e20;
+}
+
+.post-card {
+  background-color: var(--color-background);
+  border-left: 4px solid var(--dark-color-button);
+}
+
+.dark .post-card {
+  background-color: #1e1e1e;
+  border-left: 4px solid #ff9ccf;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.primary-text {
+  color: var(--color-primary);
+}
+
+.secondary-text {
+  color: var(--color-secondary);
+}
+
+.tertiary-text {
+  color: var(--color-ternary);
+}
+
+.heading-text {
+  color: var(--color-button);
+}
+
+.dark .primary-text {
+  color: var(--dark-color-primary);
+}
+
+.dark .secondary-text {
+  color: var(--dark-color-secondary);
+}
+
+.dark .tertiary-text {
+  color: var(--dark-color-ternary);
+}
+
+.dark .heading-text {
+  color: var(--dark-color-button);
+}
+
+.send-button {
+  background-color: var(--color-button);
+  color: #ffffff;
+}
+/* bg-pink-500 hover:bg-pink-600 text-white  */
+
+.send-button:hover {
+  background-color: var(--dark-color-button);
+  cursor: pointer;
+}
+
+.disable-button {
+  background-color: var(--color-ternary);
+  cursor: not-allowed;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.secondary-button:hover {
+  background-color: var(--dark-color-primary);
+  cursor: pointer;
+}
+
+.dark .send-button {
+  background-color: var(--dark-color-button);
+  color: #ffffff;
+}
+
+.dark .send-button:hover {
+  background-color: var(--color-button);
+  cursor: pointer;
+}
+
+.dark .secondary-button {
+  background-color: var(--dark-color-primary);
+  color: #ffffff;
+}
+
+.dark .secondary-button:hover {
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.input-box {
+  border: 1px solid var(--dark-color-button);
+  border-radius: 9999px;
+  outline: none;
+}
+
+.input-box:focus {
+  box-shadow: 0 0 0 1px var(--dark-color-button);
+}
+
+.dark .input-box {
+  border: 1px solid var(--dark-color-ternary);
+  border-radius: 9999px;
+  outline: none;
+}
+.dark .input-box:focus {
+  box-shadow: 0 0 0 1px var(--dark-color-ternary);
+}
+
+.comment-card {
+  background-color: #ffffff;
+}
+
+.dark .comment-card {
+  /* background-color: var(--dark-background); */
+  background-color: #232326;
+  box-shadow: 1px 1px rgba(159, 159, 159, 0.3);
+}
+
+.create-post-box {
+  border: 1px solid var(--dark-color-button);
+  border-radius: 0.375rem;
+  outline: none;
+
+  color: var(--color-secondary);
+}
+
+.create-post-box:focus {
+  box-shadow: 0 0 0 1px var(--dark-color-button);
+}
+
+.dark .create-post-box {
+  border: 1px solid var(--dark-color-ternary);
+
+  color: var(--dark-color-secondary);
+}
+
+.dark .create-post-box {
+  box-shadow: 0 0 0 1px var(--dark-color-ternary);
+}
