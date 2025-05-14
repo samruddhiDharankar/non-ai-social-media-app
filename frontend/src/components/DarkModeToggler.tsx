@@ -4,7 +4,7 @@ function DarkModeToggler() {
     const { darkMode, setDarkMode } = useDarkMode();
     return (
         <button onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? "Light" : "Dark"}
+            {darkMode ? "☀️" : "🌙"}
         </button>
     )
 }

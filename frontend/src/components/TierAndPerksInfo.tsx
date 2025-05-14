@@ -19,7 +19,7 @@ function TierAndPerksInfo({ isVisible, closeModal }: TierAndPerksInfoProps) {
 
                 <div className="space-y-3 mt-4 px-4 py-3 bg-white bg-opacity-20 rounded-lg">
                     <h3 className="font-semibold text-xl md:text-2xl text-purple-400">🔮 What’s in Store?</h3>
-                    <p className="text-sm opacity-80">
+                    <p className="text-sm opacity-80 text-[#3d2d63]">
                         The higher your authenticity, the more you stand out! Get ready for a fun journey, and let’s see who can reach the top tier first.
                     </p>
                 </div>

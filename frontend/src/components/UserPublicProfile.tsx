@@ -288,30 +288,30 @@ function UserPublicProfile() {
 
             {/* Follower Modal */}
             {showFollowerModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-200/60 via-yellow-100/60 to-purple-200/60 backdrop-blur-md">
+                <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
                     {/* Floating shapes */}
                     <div className="absolute inset-0 pointer-events-none animate-pulse opacity-30">
-                        <div className="absolute top-10 left-10 w-4 h-4 bg-pink-300 rounded-full blur-md"></div>
-                        <div className="absolute top-1/2 right-12 w-6 h-6 bg-yellow-300 rounded-full blur-sm"></div>
-                        <div className="absolute bottom-10 left-1/3 w-3 h-3 bg-purple-300 rounded-full blur-md"></div>
+                        <div className="absolute top-10 left-10 w-4 h-4 rounded-full blur-md"></div>
+                        <div className="absolute top-1/2 right-12 w-6 h-6 rounded-full blur-sm"></div>
+                        <div className="absolute bottom-10 left-1/3 w-3 h-3 bg rounded-full blur-md"></div>
                     </div>
 
-                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
+                    <div className="navbar-background relative w-[90%] max-w-md rounded-2xl shadow-2xl p-6">
                         <button
                             onClick={() => setShowFollowerModal(false)}
                             className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition cursor-pointer"
                         >
                             ✖
                         </button>
-                        <h3 className="text-2xl font-bold text-center text-pink-600 mb-4">Followers</h3>
+                        <h3 className="primary-text text-2xl font-bold text-center mb-4">Followers</h3>
 
                         <div className="max-h-[300px] overflow-y-auto space-y-3">
                             {followers.length > 0 ? (
                                 followers.map((f) => (
                                     <Link key={f._id} to={`/${f.follower.username}`} onClick={() => setShowFollowerModal(false)}>
-                                        <div className="p-4 mb-2 bg-gradient-to-r from-pink-100 to-yellow-100 rounded-xl shadow cursor-pointer ">
-                                            <p className="font-bold text-gray-800">{f.follower.name}</p>
-                                            <p className="text-sm text-gray-500">@{f.follower.username}</p>
+                                        <div className="create-post-box p-4 mb-2 rounded-xl shadow cursor-pointer ">
+                                            <p className="primary-text">{f.follower.name}</p>
+                                            <p className="tertiary-text text-sm">@{f.follower.username}</p>
                                         </div>
                                     </Link>
                                 ))
@@ -325,30 +325,30 @@ function UserPublicProfile() {
 
             {/* Following Modal */}
             {showFollowingModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-200/60 via-yellow-100/60 to-purple-200/60 backdrop-blur-md">
+                <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md">
                     {/* Floating shapes */}
                     <div className="absolute inset-0 pointer-events-none animate-pulse opacity-30">
-                        <div className="absolute top-10 left-10 w-4 h-4 bg-pink-300 rounded-full blur-md"></div>
-                        <div className="absolute top-1/2 right-12 w-6 h-6 bg-yellow-300 rounded-full blur-sm"></div>
-                        <div className="absolute bottom-10 left-1/3 w-3 h-3 bg-purple-300 rounded-full blur-md"></div>
+                        <div className="absolute top-10 left-10 w-4 h-4 rounded-full blur-md"></div>
+                        <div className="absolute top-1/2 right-12 w-6 h-6 rounded-full blur-sm"></div>
+                        <div className="absolute bottom-10 left-1/3 w-3 h-3 rounded-full blur-md"></div>
                     </div>
 
-                    <div className="relative w-[90%] max-w-md bg-white rounded-2xl shadow-2xl p-6">
+                    <div className="navbar-background relative w-[90%] max-w-md rounded-2xl shadow-2xl p-6">
                         <button
                             onClick={() => setShowFollowingModal(false)}
                             className="absolute top-3 right-3 text-lg text-gray-400 hover:text-pink-600 transition cursor-pointer"
                         >
                             ✖
                         </button>
-                        <h3 className="text-2xl font-bold text-center primary-text mb-4">Following</h3>
+                        <h3 className="primary-text text-2xl font-bold text-center mb-4">Following</h3>
 
                         <div className="max-h-[300px] overflow-y-auto space-y-3">
                             {following.length > 0 ? (
                                 following.map((f) => (
                                     <Link key={f._id} to={`/${f.following.username}`} onClick={() => setShowFollowingModal(false)}>
-                                        <div className="p-4 mb-2 gradient-background rounded-xl shadow cursor-pointer ">
-                                            <p className="font-bold text-gray-800">{f.following.name}</p>
-                                            <p className="text-sm text-gray-500">@{f.following.username}</p>
+                                        <div className="create-post-box p-4 mb-2 rounded-xl shadow cursor-pointer ">
+                                            <p className="primary-text">{f.following.name}</p>
+                                            <p className="tertiary-text text-sm">@{f.following.username}</p>
                                         </div>
                                     </Link>
                                 ))

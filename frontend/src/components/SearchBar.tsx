@@ -62,7 +62,7 @@ function SearchBar() {
                     placeholder="Search"
                     value={searchQuery}
                     onChange={handleSearch}
-                    className="w-full border border-pink-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                    className="w-full border border-[#a855f7] rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#a855f7]"
                 />
 
 

@@ -48,10 +48,10 @@ function Navbar() {
 
             {/* Search */}
             <SearchBar />
-            <DarkModeToggler />
 
             {/* Right-side buttons */}
             <div className="flex items-center gap-4 ml-4">
+                <DarkModeToggler />
                 {/* Always visible ? button */}
                 <button
                     onClick={() => setShowInfo(true)}

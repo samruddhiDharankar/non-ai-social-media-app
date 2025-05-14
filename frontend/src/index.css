@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* @custom-variant dark (&:where(.dark, .dark *)); */
-
 :root {
   --color-primary: #ad7ffd;
   --color-secondary: rgb(119, 117, 117);
@@ -9,19 +7,25 @@
   --color-background: #ffffff;
   --color-button: #ff4fa7;
 
-  --dark-color-primary: #cbbeff;
-  --dark-color-secondary: rgb(184, 184, 184);
+  --dark-color-primary: #a855f7;
+  --dark-color-secondary: #a1a1aa;
   --dark-color-ternary: rgb(125, 125, 125);
-  --dark-background: #121212;
-  --dark-color-button: #ff9ccf;
+  --dark-background: #1f1b35;
+  --dark-color-button: #d946ef;
+}
+
+* {
+  font-family: "Space Grotesk", "Inter", sans-serif;
 }
 
 body {
   background: linear-gradient(to bottom right, #fef08a, #fbcfe8);
+  color: var(--color-secondary);
 }
+
 .dark body {
-  background: linear-gradient(to bottom right, #161618, #1e1e20);
-  color: gray;
+  background: linear-gradient(to bottom right, #1a132b, #1a132b);
+  color: #f4f4f5;
 }
 
 .gradient-background {
@@ -29,7 +33,7 @@ body {
 }
 
 .dark .gradient-background {
-  background-color: linear-gradient(to bottom right, #1e1e20, #1e1e20);
+  background: linear-gradient(to bottom right, #1e1e20, #1a132b);
 }
 
 .navbar-background {
@@ -37,7 +41,8 @@ body {
 }
 
 .dark .navbar-background {
-  background-color: #1e1e20;
+  background-color: #1a132b;
+  box-shadow: 0 0 0 1px #3d2d63;
 }
 
 .post-card {
@@ -46,8 +51,8 @@ body {
 }
 
 .dark .post-card {
-  background-color: #1e1e1e;
-  border-left: 4px solid #ff9ccf;
+  background-color: #262040;
+  border-left: 4px solid #d946ef;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -87,11 +92,11 @@ body {
   background-color: var(--color-button);
   color: #ffffff;
 }
-/* bg-pink-500 hover:bg-pink-600 text-white  */
 
 .send-button:hover {
   background-color: var(--dark-color-button);
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 .disable-button {
@@ -118,6 +123,8 @@ body {
 .dark .send-button:hover {
   background-color: var(--color-button);
   cursor: pointer;
+  transform: scale(1.03);
+  box-shadow: 0 0 10px #d946ef88;
 }
 
 .dark .secondary-button {
@@ -134,6 +141,7 @@ body {
   border: 1px solid var(--dark-color-button);
   border-radius: 9999px;
   outline: none;
+  transition: all 0.2s ease-in-out;
 }
 
 .input-box:focus {
@@ -154,9 +162,7 @@ body {
 }
 
 .dark .comment-card {
-  /* background-color: var(--dark-background); */
-  background-color: #232326;
-  box-shadow: 1px 1px rgba(159, 159, 159, 0.3);
+  background-color: #1f1b35;
 }
 
 .create-post-box {
@@ -179,4 +185,21 @@ body {
 
 .dark .create-post-box {
   box-shadow: 0 0 0 1px var(--dark-color-ternary);
+}
+
+.followModal {
+  background: linear-gradient(
+    to bottom right,
+    rgba(236, 172, 204, 0.6),
+    rgba(255, 236, 139, 0.6),
+    rgba(204, 153, 255, 0.6)
+  );
+}
+
+.dark .followModal {
+  background: linear-gradient(
+    to bottom right,
+    rgba(169, 83, 255, 0.6),
+    rgba(70, 70, 70, 0.6)
+  );
 }
