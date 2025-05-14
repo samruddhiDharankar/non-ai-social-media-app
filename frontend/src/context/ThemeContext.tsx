@@ -1,8 +1,19 @@
-import { Children, createContext, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-const ThemeContext = createContext("light");
+// Define the context type
+type ThemeContextType = {
+    darkMode: boolean;
+    setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export const ThemeProvider = ({ children }) => {
+type ThemeProviderProps = {
+    children: ReactNode;
+};
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [darkMode, setDarkMode] = useState(
         localStorage.getItem("theme") === "dark"
     );
@@ -28,4 +39,11 @@ export const ThemeProvider = ({ children }) => {
     )
 }
 
-export const useDarkMode = () => useContext(ThemeContext);
+// Hook to use context (with safety check)
+export const useDarkMode = (): ThemeContextType => {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error("useDarkMode must be used within a ThemeProvider");
+    }
+    return context;
+};
