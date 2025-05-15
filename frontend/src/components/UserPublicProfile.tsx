@@ -8,6 +8,7 @@ import { useAuthStore } from '../utils/useAuthStore';
 import { Follow } from '../types/follow';
 import TierAndPerksInfo from './TierAndPerksInfo';
 import TierChange from './TierChange';
+import AddCommentBox from './AddCommentBox';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
@@ -388,6 +389,19 @@ function UserPublicProfile() {
                                         <p className="tertiary-text text-sm">No comments yet 💭</p>
                                     )}
                                 </div>
+                                {/* New Comment Input */}
+                                <AddCommentBox
+                                    postId={post._id}
+                                    onCommentAdded={(newComment: any) => {
+                                        setUserPostData((prevData) =>
+                                            prevData.map((p) =>
+                                                p._id === post._id
+                                                    ? { ...p, comments: [...p.comments, newComment] }
+                                                    : p
+                                            )
+                                        )
+                                    }}
+                                />
                             </div>
                         </div>
                     ))

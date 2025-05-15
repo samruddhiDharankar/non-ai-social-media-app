@@ -5,12 +5,11 @@ import { formatDateTime } from '../utils/dateFormatter';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/useAuthStore';
 import TierAndPerksInfo from './TierAndPerksInfo';
+import AddCommentBox from './AddCommentBox';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 function DashboardRoute() {
     const navigate = useNavigate();
     const [feedData, setFeedData] = useState<Post[]>([]);
-    const [newComment, setNewComment] = useState<{ [key: string]: string }>({});
-    const [commentLoading, setCommentLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -92,43 +91,6 @@ function DashboardRoute() {
         return () => observer.disconnect();
     }, [handleObserver]);
 
-
-    const handleAddComment = async (postId: string) => {
-        const comment = newComment[postId]?.trim();
-        if (!comment) return;
-        setCommentLoading(true);
-
-        try {
-            const response = await fetch(`${VITE_API_URL}/comments/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${token}`,
-                },
-                // credentials: 'include',
-                body: JSON.stringify({ postId, content: comment }),
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                setNewComment((prev) => ({ ...prev, [postId]: "" }));  // Clear comment for only this post
-
-                // Refresh comments for the post
-                setFeedData(prevData =>
-                    prevData.map(post =>
-                        post._id === postId ? { ...post, comments: [...post.comments, data] } : post
-                    )
-                );
-            } else {
-                console.log("Failed to add comment");
-            }
-        } catch (err) {
-            console.error("Error adding comment", err);
-        } finally {
-            setCommentLoading(false);
-        }
-    };
-
     return (
         <div className="min-h-screen p-6 font-sans">
             {showTierInfoModal && (
@@ -169,22 +131,18 @@ function DashboardRoute() {
                                 </div>
 
                                 {/* New Comment Input */}
-                                <div className="mt-4 flex items-center gap-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Add a comment..."
-                                        value={newComment[post._id] || ""}
-                                        onChange={(e) => setNewComment(prev => ({ ...prev, [post._id]: e.target.value }))}
-                                        className="input-box flex-1 px-4 py-2 text-sm"
-                                    />
-                                    <button
-                                        onClick={() => handleAddComment(post._id)}
-                                        disabled={commentLoading}
-                                        className="send-button px-4 py-2 rounded-full text-sm shadow-md"
-                                    > Send
-                                        {/* {commentLoading ? '...' : 'Send'} */}
-                                    </button>
-                                </div>
+                                <AddCommentBox
+                                    postId={post._id}
+                                    onCommentAdded={(newComment: any) => {
+                                        setFeedData((prevData) =>
+                                            prevData.map((p) =>
+                                                p._id === post._id
+                                                    ? { ...p, comments: [...p.comments, newComment] }
+                                                    : p
+                                            )
+                                        )
+                                    }}
+                                />
                             </div>
                         </div>
                     ))
