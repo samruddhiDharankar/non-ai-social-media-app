@@ -8,6 +8,7 @@ export interface IPost extends Document {
   tierAtPostTime: string;
   user: Types.ObjectId; // refers to User document
   comments: Types.Array<Types.ObjectId>; // array of comment references
+  isDeleted: boolean;
 }
 
 const postSchema = new Schema<IPost>(
@@ -27,6 +28,7 @@ const postSchema = new Schema<IPost>(
         ref: "Comment", // ref to comment model
       },
     ],
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

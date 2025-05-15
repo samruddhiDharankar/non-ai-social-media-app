@@ -19,4 +19,5 @@ export interface Post {
   updatedAt: string;
   user: User;
   comments: Comment[];
+  isDeleted: boolean;
 }

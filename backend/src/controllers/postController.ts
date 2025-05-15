@@ -185,3 +185,41 @@ export const getPostByUserId = async (
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const deletePostById = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: "Not authorized" });
+      logger.error(`Not authorized`);
+      return;
+    }
+    const postId = req.params.id;
+    // soft delete for now
+    const deletedPost = await Post.findByIdAndUpdate(
+      { _id: postId },
+      {
+        $set: {
+          isDeleted: true,
+        },
+      }
+    );
+    if (deletedPost) {
+      const userPostCount = await User.findByIdAndUpdate(
+        { _id: req.user.id },
+        {
+          $inc: { postCount: -1 },
+        },
+        { new: true }
+      );
+    }
+    res.status(200).json({ message: "Post deleted", post: { postId } });
+    return;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error("Unknown error");
+    logger.error(`Logout error, Error: ${err.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

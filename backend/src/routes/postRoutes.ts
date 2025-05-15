@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createPost,
+  deletePostById,
   getAllPosts,
   getPostById,
   getPostByUserId,
@@ -14,5 +15,6 @@ router.get("/feed", protect, getAllPosts);
 router.get("/user/:id", protect, getPostByUserId);
 router.get("/:id", protect, getPostById);
 router.post("/", protect, postRateLimiter, createPost);
+router.post("/:id", protect, deletePostById);
 
 export default router;

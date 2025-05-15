@@ -9,6 +9,7 @@ import { Follow } from '../types/follow';
 import TierAndPerksInfo from './TierAndPerksInfo';
 import TierChange from './TierChange';
 import AddCommentBox from './AddCommentBox';
+import DeletePost from './DeletePost';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 function UserPublicProfile() {
@@ -35,6 +36,9 @@ function UserPublicProfile() {
 
     const token = localStorage.getItem("accessToken");
 
+    const loggedInUsername = useAuthStore(state => state.user?.username);
+    const [showPostDeleteButton, setShowPostDeleteButton] = useState(false);
+
     const closeTierInfoModal = () => {
         setShowTierInfoModal(false);
     }
@@ -54,12 +58,13 @@ function UserPublicProfile() {
 
                 if (postResponse.ok) {
                     const postData = await postResponse.json();
+                    const filteredPosts = postData.posts.filter((post: { isDeleted?: boolean }) => !post.isDeleted);
                     if (userData?._id === prevUserId) {
-                        setUserPostData(prev => [...prev, ...postData.posts]);
+                        setUserPostData(prev => [...prev, ...filteredPosts]);
 
                     }
                     else {
-                        setUserPostData(postData.posts);
+                        setUserPostData(filteredPosts);
                         setPrevUserId(userData?._id);
 
                     }
@@ -73,6 +78,14 @@ function UserPublicProfile() {
         } catch (err) {
             console.log("error fetching posts", err);
         }
+    }
+
+    const handlePostDeleted = (deletedPostId: string) => {
+        // Immediately remove deleted post from state
+        setUserPostData(prevPosts => prevPosts.filter(post => post._id !== deletedPostId));
+        // Optionally reset page and fetch fresh posts if you want
+        // setPage(1);
+        // fetchUserPosts(1);
     }
 
     useEffect(() => {
@@ -110,8 +123,9 @@ function UserPublicProfile() {
                         },
                         // credentials: "include",
                     });
-                    if (username === useAuthStore.getState().user?.username) {
+                    if (username === loggedInUsername) {
                         setDisableFollowButtons(true);
+                        setShowPostDeleteButton(true);
                     }
                     else {
                         setDisableFollowButtons(false);
@@ -126,6 +140,7 @@ function UserPublicProfile() {
                         // credentials: "include",
                     });
                     setDisableFollowButtons(true);
+                    setShowPostDeleteButton(true);
                 }
 
                 const userData = await userResponse.json();
@@ -368,7 +383,12 @@ function UserPublicProfile() {
                 {userPostData && userPostData.length > 0 ? (
                     userPostData.map((post) => (
                         <div key={post._id} className="post-card p-5 rounded-2xl shadow-lg">
-                            <p className="secondary-text text-lg">{post?.text}</p>
+                            <div className='flex justify-between'>
+                                <p className="secondary-text text-lg">{post?.text}</p>
+                                {showPostDeleteButton && (
+                                    <DeletePost postId={post._id} onDelete={() => handlePostDeleted(post._id)} />
+                                )}
+                            </div>
                             <p className="primary-text text-sm mt-1">{post?.aiDetectionSummary}</p>
                             <p className="tertiary-text text-xs">{formatDateTime(post?.createdAt)}</p>
 
@@ -410,9 +430,9 @@ function UserPublicProfile() {
                 )}
 
                 {/* Infinite scroll loader */}
-                <div ref={loaderRef} className="secondary-text text-center mt-6">
+                {/* <div ref={loaderRef} className="secondary-text text-center mt-6">
                     {hasMore ? "Loading more..." : "No more posts"}
-                </div>
+                </div> */}
             </div>
         </div >
 

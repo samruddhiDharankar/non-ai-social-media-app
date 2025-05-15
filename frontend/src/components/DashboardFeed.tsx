@@ -33,9 +33,10 @@ function DashboardRoute() {
                 const data = await response.json();
                 // setFeedData(prev => [...prev, ...data.posts]);
                 setFeedData(prev => {
-                    const existingIds = new Set(prev.map(p => p._id));      // to avoid duplicates
-                    const uniqueNewPosts = data.posts.filter((p: { _id: string; }) => !existingIds.has(p._id));
-                    return [...prev, ...uniqueNewPosts];
+                    const filteredPrev = prev.filter(p => !p.isDeleted);
+                    const existingIds = new Set(filteredPrev.map(p => p._id));      // to avoid duplicates
+                    const uniqueNewPosts = data.posts.filter((p: { _id: string; isDeleted?: boolean }) => !existingIds.has(p._id) && !p.isDeleted);
+                    return [...filteredPrev, ...uniqueNewPosts];
                 });
 
                 setHasMore(pageNumber < data.totalPages);
@@ -110,6 +111,7 @@ function DashboardRoute() {
                             </div>
                             <p className="secondary-text text-lg">{post.text}</p>
                             <p className="primary-text text-sm mt-1">{post.aiDetectionSummary}</p>
+
 
                             {/* Comments */}
                             <div className="mt-4">
